@@ -9,6 +9,7 @@ import {
   readFileBytes,
   writeFileBytes,
   loadConfig,
+  deriveBasePath,
   readDir,
   exit,
 } from "./lib.ts";
@@ -32,6 +33,14 @@ async function build(): Promise<void> {
   const config = await loadConfig(CONFIG_FILE);
   console.log(`   ✓ site: ${config.site.title}`);
   console.log(`   ✓ book: ${config.book.title} (${config.book.author})\n`);
+
+  if (config.site.url === "https://example.org" || config.site.url === "") {
+    throw new Error("site.url em typst.toml é o placeholder (https://example.org). Defina a URL real do site para gerar o base path.");
+  }
+
+  // Base path: derive de site.url; SITE_BASE (env) tem prioridade (ex.: "" para preview local na raiz).
+  const base = process.env.SITE_BASE ?? deriveBasePath(config.site.url);
+  console.log(`   ✓ base path: "${base}"\n`);
 
   // 1. Carrega posts
   console.log("📂 Carregando posts...");
@@ -58,13 +67,14 @@ async function build(): Promise<void> {
     title: config.site.title,
     subtitle: config.site.subtitle,
     author: config.site.author,
-  });
+  }, base);
   console.log("   ✓ site.typ gerado\n");
 
   // 4. Compila o SITE (bundle HTML)
   console.log("🌐 Compilando site (bundle HTML)...");
   const siteResult = await runCommand("typst", [
     "compile",
+    "--input", `base=${base}`,
     "--features", "bundle,html",
     "--format", "bundle",
     SITE_FILE,
@@ -108,7 +118,7 @@ async function build(): Promise<void> {
 
   // 8. Gera saídas estáticas (busca + RSS)
   console.log("🔍 Gerando search-index.json e rss.xml...");
-  await writeSearchIndex(DIST_DIR, posts);
+  await writeSearchIndex(DIST_DIR, posts, base);
   await writeRss(DIST_DIR, posts, config.site.title, config.site.url);
   console.log("   ✓ search-index.json e rss.xml\n");
 

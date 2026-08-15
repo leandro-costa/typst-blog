@@ -1,4 +1,4 @@
-﻿import { writeTextFile, type Post } from "./lib.ts";
+﻿import { writeTextFile, joinBasePath, type Post } from "./lib.ts";
 import { escapeTypstString, identFromSlug, metaToTypstTuple, toIsoDateTime } from "./typst-helpers.ts";
 
 export interface SiteOptions {
@@ -48,7 +48,8 @@ function parseToc(body: string): { level: number; text: string }[] {
 export async function generateSite(
   posts: Post[],
   outputPath: string,
-  options: SiteOptions
+  options: SiteOptions,
+  base: string
 ): Promise<void> {
   const lines: string[] = [];
   const siteTitle = options.title;
@@ -58,6 +59,8 @@ export async function generateSite(
   lines.push("// Gerado automaticamente — não edite à mão.");
   lines.push('#import "templates/site.typ": site-layout, hero, post-list, post-list-filtered, post-list-by-type, post-nav');
   lines.push('#import "templates/post.typ": post-layout');
+  lines.push("");
+  lines.push(`#let base = "${escapeTypstString(base)}"`);
   lines.push("");
 
   // Importa cada post como módulo
@@ -105,21 +108,21 @@ export async function generateSite(
   }
   lines.push("  )");
   lines.push("");
-  lines.push("  #let sidebar-sections = [");
+lines.push("  #let sidebar-sections = [");
   lines.push('    #html.elem("div", attrs: (class: "sidebar-section"))[');
   lines.push('      #html.elem("h4")[Tags]');
   lines.push('      #for tag in tags-meta [');
-  lines.push('        #html.elem("a", attrs: (href: "/tags/" + tag + ".html", class: "tag-link"))[#tag]');
+  lines.push('        #html.elem("a", attrs: (href: base + "/tags/" + tag + ".html", class: "tag-link"))[#tag]');
   lines.push("      ]");
   lines.push("    ]");
   lines.push('    #html.elem("div", attrs: (class: "sidebar-section"))[');
   lines.push('      #html.elem("h4")[Recentes]');
   lines.push('      #for post in recent-meta [');
-  lines.push('        #html.elem("a", attrs: (href: "/posts/" + post.slug + ".html"))[#post.title]');
+  lines.push('        #html.elem("a", attrs: (href: base + "/posts/" + post.slug + ".html"))[#post.title]');
   lines.push("      ]");
   lines.push("    ]");
   lines.push('    #html.elem("div", attrs: (class: "sidebar-section"))[');
-  lines.push('      #html.elem("a", attrs: (href: "/book.pdf", class: "btn-primary"))[📖 Baixar Livro em PDF]');
+  lines.push('      #html.elem("a", attrs: (href: base + "/book.pdf", class: "btn-primary"))[📖 Baixar Livro em PDF]');
   lines.push("    ]");
   lines.push("  ]");
   lines.push("  #let site-sidebar = [");

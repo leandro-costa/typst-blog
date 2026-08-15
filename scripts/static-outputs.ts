@@ -1,4 +1,4 @@
-import { writeTextFile, type Post } from "./lib.ts";
+import { writeTextFile, joinBasePath, type Post } from "./lib.ts";
 import { toIsoDateTime } from "./typst-helpers.ts";
 
 function xmlEscape(s: string): string {
@@ -10,14 +10,14 @@ function xmlEscape(s: string): string {
 }
 
 // Emite dist/search-index.json para a busca client-side.
-export async function writeSearchIndex(distDir: string, posts: Post[]): Promise<void> {
+export async function writeSearchIndex(distDir: string, posts: Post[], base: string): Promise<void> {
   const index = posts.map((p) => ({
     title: p.meta.title,
     slug: p.meta.slug,
     date: p.meta.date,
     tags: p.meta.tags ?? [],
     excerpt: p.meta.excerpt ?? "",
-    url: `/posts/${p.meta.slug}.html`,
+    url: joinBasePath(base, `/posts/${p.meta.slug}.html`),
   }));
   await writeTextFile(`${distDir}/search-index.json`, JSON.stringify(index, null, 2));
 }

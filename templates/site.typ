@@ -2,7 +2,10 @@
 // Layout de página do site, "aware de alvo":
 // - html/bundle (build) → elementos HTML (nav, hero, cards, footer)
 // - paged (preview do Tinymist) → versão tipografada
-// Links usam caminhos absolutos de raiz (/index.html, /book.pdf, /assets/...).
+// Links usam o base path (passado via `--input base=...` no build; "" na raiz).
+// Ex.: base "/typst-blog" → "/typst-blog/assets/..."; base "" → "/assets/...".
+
+#let base = sys.inputs.at("base", default: "")
 
 #let site-title = "2026.2 POO"
 #let site-subtitle = "Blog + livro"
@@ -11,31 +14,31 @@
   html.elem("meta", attrs: (charset: "utf-8"))
   html.elem("meta", attrs: (name: "viewport", content: "width=device-width, initial-scale=1"))
   html.elem("title", page-title)
-  html.elem("link", attrs: (rel: "stylesheet", href: "/assets/css/style.css"))
-  html.elem("script", attrs: (src: "/assets/js/search.js", defer: "defer"))
+  html.elem("link", attrs: (rel: "stylesheet", href: base + "/assets/css/style.css"))
+  html.elem("script", attrs: (src: base + "/assets/js/search.js", defer: "defer"))
 }
 
 #let category-label(t) = if t == "aula" { "Aulas" } else if t == "exercicio" { "Exercícios" } else if t == "solucao" { "Soluções" } else if t == "trabalho" { "Trabalhos" } else { t }
 
 #let nav(brand: site-title, categories: ()) = html.elem("nav", attrs: (class: "navbar"))[
-  #html.elem("a", attrs: (href: "/index.html", class: "brand"))[#brand]
+  #html.elem("a", attrs: (href: base + "/index.html", class: "brand"))[#brand]
   #html.elem("div", attrs: (class: "nav-search"))[
     #html.elem("input", attrs: (id: "search", type: "search", placeholder: "Buscar..."))
     #html.elem("div", attrs: (id: "search-results", class: "search-results"))
   ]
   #html.elem("div", attrs: (class: "nav-links"))[
     #for cat in categories {
-      html.elem("a", attrs: (href: "/categorias/" + cat + ".html", class: "nav-cat"))[#category-label(cat)]
+      html.elem("a", attrs: (href: base + "/categorias/" + cat + ".html", class: "nav-cat"))[#category-label(cat)]
     }
-    #html.elem("a", attrs: (href: "/book.pdf"))[📖 Download Livro]
-    #html.elem("a", attrs: (href: "/rss.xml", class: "rss-link"))[RSS]
+    #html.elem("a", attrs: (href: base + "/book.pdf"))[📖 Download Livro]
+    #html.elem("a", attrs: (href: base + "/rss.xml", class: "rss-link"))[RSS]
   ]
 ]
 
 #let footer() = html.elem("footer", attrs: (class: "footer"))[
   #html.elem("p")[
     Gerado com #html.elem("a", attrs: (href: "https://typst.app"))[Typst] ·
-    #html.elem("a", attrs: (href: "/book.pdf"))[Baixar PDF do Livro]
+    #html.elem("a", attrs: (href: base + "/book.pdf"))[Baixar PDF do Livro]
   ]
 ]
 
@@ -76,7 +79,7 @@
     html.elem("header", attrs: (class: "hero"))[
       #html.elem("h1")[#title]
       #html.elem("p", attrs: (class: "subtitle"))[#subtitle]
-      #html.elem("a", attrs: (href: "/book.pdf", class: "btn-primary"))[📖 Baixar Livro em PDF]
+      #html.elem("a", attrs: (href: base + "/book.pdf", class: "btn-primary"))[📖 Baixar Livro em PDF]
     ]
   } else {
     [
@@ -95,7 +98,7 @@
   if target() == "html" or target() == "bundle" {
     html.elem("article", attrs: (class: "post-card"))[
       #html.elem("h3")[
-        #html.elem("a", attrs: (href: "/posts/" + post.slug + ".html"))[#post.title]
+        #html.elem("a", attrs: (href: base + "/posts/" + post.slug + ".html"))[#post.title]
       ]
       #html.elem("div", attrs: (class: "post-card-meta"))[
         #html.elem("time")[#post.date-pt]
@@ -194,10 +197,10 @@
   if target() == "html" or target() == "bundle" {
     html.elem("nav", attrs: (class: "post-nav"))[
       #if prev != none [
-        #html.elem("a", attrs: (href: "/posts/" + prev.slug + ".html", class: "nav-prev"))[← #prev.title]
+        #html.elem("a", attrs: (href: base + "/posts/" + prev.slug + ".html", class: "nav-prev"))[← #prev.title]
       ]
       #if next != none [
-        #html.elem("a", attrs: (href: "/posts/" + next.slug + ".html", class: "nav-next"))[#next.title →]
+        #html.elem("a", attrs: (href: base + "/posts/" + next.slug + ".html", class: "nav-next"))[#next.title →]
       ]
     ]
   } else {

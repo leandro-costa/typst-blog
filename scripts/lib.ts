@@ -59,6 +59,24 @@ export interface BlogConfig {
   book: { title: string; subtitle: string; author: string };
 }
 
+// Deriva o base path (caminho) de uma URL de site. Raiz/domínio → "".
+// Ex.: "https://host/typst-blog" → "/typst-blog"; "https://host" → "".
+export function deriveBasePath(url: string): string {
+  try {
+    const p = new URL(url).pathname;
+    return p.replace(/\/+$/, "");
+  } catch {
+    return "";
+  }
+}
+
+// Junta um base path a um caminho de raiz, evitando "/" duplo.
+// Ex.: joinBasePath("", "/index.html") → "/index.html";
+//      joinBasePath("/typst-blog", "/index.html") → "/typst-blog/index.html".
+export function joinBasePath(base: string, path: string): string {
+  return (base + "/" + path).replace(/\/{2,}/g, "/");
+}
+
 // Parser TOML mínimo (seções `[x]`, `key = "string"`, `key = [ "a", "b" ]`,
 // comentários `#`). Suficiente para um typst.toml de config do blog.
 export type TomlValue = string | string[] | TomlObject;

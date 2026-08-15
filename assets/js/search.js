@@ -3,9 +3,14 @@
   const results = document.getElementById("search-results");
   if (!input || !results) return;
 
+  // Base path derivado do próprio caminho deste script (sempre <base>/assets/js/search.js).
+  // Site na raiz → base "". Ex.: "/typst-blog/assets/js/search.js" → "/typst-blog".
+  const scriptPath = document.currentScript?.src ? new URL(document.currentScript.src).pathname : "";
+  const base = scriptPath.replace(/\/assets\/js\/search\.js$/, "");
+
   let index = null;
 
-  fetch("/search-index.json")
+  fetch(base + "/search-index.json")
     .then((r) => r.json())
     .then((data) => {
       index = data;
