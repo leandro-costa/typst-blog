@@ -1,0 +1,9 @@
+[site]
+title = "2026.2 POO"
+subtitle = "Material de apoio usado nas aulas do semestre para ajudar no aprendizado e que também existe em formato PDF"
+url = "https://example.org"
+
+[book]
+title = "2026.2 POO"
+subtitle = "Coletânea da aulas"
+author = "Leandro Souza"

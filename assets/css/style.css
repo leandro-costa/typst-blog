@@ -1,0 +1,770 @@
+/* Typst Blog - Estilos */
+
+:root {
+  --bg: #fafafa;
+  --fg: #1a1a1a;
+  --muted: #666;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --border: #e5e5e5;
+  --card-bg: #fff;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --max-width: 720px;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.65;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--fg);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.nav-search {
+  position: relative;
+  flex: 0 1 260px;
+}
+
+.nav-search input[type="search"] {
+  width: 100%;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.nav-search .search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.35rem 0.7rem;
+  z-index: 200;
+}
+
+.nav-search .search-results:not(:empty) {
+  display: block;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+}
+
+/* Container */
+.container {
+  max-width: none;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 3rem 0 2.5rem;
+}
+
+.hero h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+/* Posts list */
+.posts-list {
+  margin-top: 1rem;
+}
+
+.posts-list h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.post-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.post-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.post-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.post-card h3 a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.post-card h3 a:hover {
+  color: var(--accent);
+}
+
+.post-card-meta {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-card p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Tags */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.tag {
+  background: #f0f0f0;
+  color: var(--muted);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Post individual */
+.post {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.post-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.post-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.post-content {
+  font-size: 1rem;
+}
+
+.post-content h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 1.75rem 0 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.post-content h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.post-content p {
+  margin-bottom: 1rem;
+}
+
+.post-content ul, .post-content ol {
+  margin: 0 0 1rem 1.5rem;
+}
+
+.post-content li {
+  margin-bottom: 0.35rem;
+}
+
+.post-content code {
+  font-family: var(--font-mono);
+  background: #f4f4f5;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+
+.post-content pre {
+  background: #1a1a1a;
+  color: #e4e4e7;
+  padding: 1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.post-content pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.post-content blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.post-content a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.post-content a:hover {
+  text-decoration: underline;
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  margin: 1rem 0;
+}
+
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.post-content th, .post-content td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.post-content th {
+  background: #f4f4f5;
+  font-weight: 600;
+}
+
+/* Math */
+math {
+  font-size: 1.05em;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* Layout 2 colunas (main + sidebar) */
+.layout {
+  max-width: none;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* TOC à esquerda, colapsável no mobile */
+.layout.toc-left {
+  display: block;
+  max-width: none;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+.icon-btn-sm {
+  width: 1.7rem;
+  height: 1.7rem;
+  font-size: 0.85rem;
+}
+
+.icon-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.icon-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Cabeçalho do sumário (título + botão) */
+.toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toc-header h4 {
+  margin-bottom: 0;
+}
+
+/* Linha do título do post (título + botão modo leitura) */
+.post-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.post-title-row h1 {
+  margin-bottom: 0;
+}
+
+.layout-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 2.5rem;
+}
+
+.layout-grid .sidebar {
+  position: sticky;
+  top: 4.5rem;
+  flex: 1 1 280px;
+  max-width: 280px;
+}
+
+.layout-grid .content {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.content {
+  min-width: 0;
+}
+
+.sidebar {
+  position: sticky;
+  top: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Colapsado (por botão ou responsivo): a sidebar vira uma barra no topo,
+   exibindo só o título "Neste post" + botão, com o TOC oculto. */
+.layout.toc-left.is-collapsed .layout-grid .sidebar {
+  flex-basis: 100%;
+  max-width: none;
+  position: static;
+}
+
+.layout.toc-left.is-collapsed .toc-list {
+  display: none;
+}
+
+/* Modo leitura: esconde navbar e sidebar por completo, sem botão de toggle.
+   `!important` garante que vença a regra de colapso do mobile. */
+body.is-fullscreen .navbar,
+body.is-fullscreen .site-footer,
+body.is-fullscreen .post-nav,
+body.is-fullscreen .layout.toc-left .sidebar {
+  display: none !important;
+}
+
+body.is-fullscreen .layout.toc-left {
+  padding: 1.5rem;
+}
+
+body.is-fullscreen .layout.toc-left .layout-grid {
+  display: block;
+}
+
+.sidebar-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.sidebar-section h4 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-section a {
+  display: block;
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.25rem;
+}
+
+.sidebar-section a:hover {
+  color: var(--accent);
+}
+
+.sidebar-section input[type="search"] {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+/* TOC (estrutura de tópicos do post) na sidebar */
+.toc nav[role="doc-toc"] h2 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  display: none;
+}
+
+.toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc ol ol {
+  padding-left: 1rem;
+}
+
+.toc a {
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.2rem 0;
+  display: block;
+  line-height: 1.35;
+}
+
+.toc a:hover {
+  color: var(--accent);
+}
+
+/* Lista do TOC gerado por post (indentação por nível) */
+.toc-list li {
+  list-style: none;
+}
+
+.toc-list .toc-l2 a { padding-left: 0.9rem; }
+.toc-list .toc-l3 a { padding-left: 1.8rem; }
+.toc-list .toc-l4 a { padding-left: 2.7rem; }
+.toc-list .toc-l5 a { padding-left: 3.6rem; }
+.toc-list .toc-l6 a { padding-left: 4.5rem; }
+
+.toc-empty {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0;
+}
+
+.search-results a {
+  display: block;
+  padding: 0.35rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.search-result-title {
+  display: block;
+  font-weight: 600;
+}
+
+.search-result-meta {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* Badge de tipo do post (aula/exercicio/solucao/trabalho) */
+.badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Cores distintas por tipo */
+.badge-aula {
+  background: #2563eb; /* azul */
+}
+
+.badge-exercicio {
+  background: #d97706; /* âmbar */
+}
+
+.badge-solucao {
+  background: #059669; /* esmeralda */
+}
+
+.badge-trabalho {
+  background: #dc2626; /* vermelho */
+}
+
+/* Navegação anterior/próximo */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 2rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.post-nav a {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  max-width: 45%;
+}
+
+.post-nav a:hover {
+  text-decoration: underline;
+}
+
+.nav-next {
+  text-align: right;
+}
+
+/* Relacionados */
+.related {
+  margin-top: 2rem;
+}
+
+.related h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .navbar {
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .nav-search {
+    flex: 1 1 100%;
+    order: 3;
+  }
+
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .post {
+    padding: 1.25rem;
+  }
+
+  .post-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  /* Mobile: a sidebar fica acima do conteúdo. Quando colapsada vira a
+     barra no topo (título + botão, TOC oculto). */
+  .layout-grid {
+    display: block;
+    gap: 0;
+  }
+
+  .layout-grid .sidebar {
+    position: static;
+    margin-bottom: 1rem;
+    max-width: none;
+    flex-basis: 100%;
+  }
+
+  .layout-grid .content {
+    flex: none;
+  }
+
+  .post-nav {
+    flex-direction: column;
+  }
+
+  .post-nav a {
+    max-width: 100%;
+  }
+
+  .nav-next {
+    text-align: left;
+  }
+}
+
+figure {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+figure img,
+figure table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+figure pre,
+figure code,
+figure p {
+  text-align: left;
+}
+
+figure figcaption {
+  margin-top: 0.5em;
+  font-size: 0.85em;
+  color: var(--muted);
+  text-align: center;
+}

@@ -1,0 +1,4 @@
+dist/
+/site.typ
+/book.typ
+node_modules/

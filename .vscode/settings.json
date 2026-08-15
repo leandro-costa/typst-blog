@@ -1,0 +1,7 @@
+{
+  "tinymist.typstExtraArgs": [ "--features", "html" ],
+  "tinymist.exportTarget": "paged",
+  "tinymist.formatterMode": "typstfmt",
+  "npm.packageManager": "bun",
+  "npm.scriptRunner": "bun"
+}
