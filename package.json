@@ -6,7 +6,7 @@
   "scripts": {
     "build": "bun run scripts/build.ts",
     "serve": "bun run scripts/serve.ts",
-    "dev": "bun run scripts/serve.ts --watch",
+    "dev": "bun run scripts/build.ts && bun run scripts/serve.ts --watch",
     "clean": "rm -rf dist site.typ book.typ"
   },
   "devDependencies": {

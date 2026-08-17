@@ -172,6 +172,58 @@ function estimateReadingTime(body: string): number {
   return Math.max(1, Math.round(words / 200));
 }
 
+function validateFiguresAndCaptions(body: string, relPath: string): void {
+  const bodyLines = body.split("\n");
+  let inCodeBlock = false;
+  
+  for (let idx = 0; idx < bodyLines.length; idx++) {
+    const line = bodyLines[idx].trim();
+    if (line.startsWith("```")) {
+      if (!inCodeBlock) {
+        inCodeBlock = true;
+        let hasFigure = false;
+        for (let j = Math.max(0, idx - 2); j <= idx; j++) {
+          if (bodyLines[j].includes("#figure")) {
+            hasFigure = true;
+            break;
+          }
+        }
+        if (!hasFigure) {
+          console.warn(`⚠️  [Validação de Post] ${relPath}:${idx + 1}: Bloco de código detectado sem encapsulamento de #figure ou sem legenda (caption).`);
+        }
+      } else {
+        inCodeBlock = false;
+      }
+    }
+    
+    if (line.includes("table(") && !line.includes("#figure")) {
+      let hasFigure = false;
+      for (let j = Math.max(0, idx - 2); j <= idx; j++) {
+        if (bodyLines[j].includes("#figure")) {
+          hasFigure = true;
+          break;
+        }
+      }
+      if (!hasFigure) {
+        console.warn(`⚠️  [Validação de Post] ${relPath}:${idx + 1}: Tabela detectada sem encapsulamento de #figure ou sem legenda (caption).`);
+      }
+    }
+    
+    if (line.includes("image(") && !line.includes("#figure")) {
+      let hasFigure = false;
+      for (let j = Math.max(0, idx - 2); j <= idx; j++) {
+        if (bodyLines[j].includes("#figure")) {
+          hasFigure = true;
+          break;
+        }
+      }
+      if (!hasFigure) {
+        console.warn(`⚠️  [Validação de Post] ${relPath}:${idx + 1}: Imagem detectada sem encapsulamento de #figure ou sem legenda (caption).`);
+      }
+    }
+  }
+}
+
 export async function loadPosts(postsDir: string): Promise<Post[]> {
   const posts: Post[] = [];
 
@@ -183,6 +235,8 @@ export async function loadPosts(postsDir: string): Promise<Post[]> {
       console.warn(`⚠️  Ignorando ${relPath}: metadados inválidos`);
       return;
     }
+
+    validateFiguresAndCaptions(parsed.body, relPath);
 
     const base = filename.replace(/\.typ$/, "");
     const { group, number } = parseName(base);

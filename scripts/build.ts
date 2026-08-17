@@ -22,7 +22,7 @@ const POSTS_DIR = "posts";
 const DIST_DIR = "dist";
 const SITE_FILE = "site.typ";
 const BOOK_FILE = "book.typ";
-const CONFIG_FILE = "typst.toml";
+const CONFIG_FILE = "typst.dev.toml";
 
 async function build(): Promise<void> {
   console.log("🚀 Typst Blog — Builder");

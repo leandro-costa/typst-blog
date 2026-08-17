@@ -53,3 +53,15 @@ caminho/nome, e a `meta` de cada post SHALL expor `type` e `group`.
 #### Scenario: Post associa referência do refs.bib
 - **WHEN** um post cita `@chave` existente em `refs.bib`
 - **THEN** a citação resolve para a referência compartilhada (site e livro)
+
+### Requirement: Figuras estruturadas com legendas em sintaxe Typst
+
+Toda imagem, diagrama, tabela e bloco de código presente nos posts SHALL ser envelopado usando a sintaxe nativa de figura do Typst (`#figure(...)`), acompanhado obrigatoriamente de uma legenda (`caption: [...]`) e o respectivo parâmetro `kind` (ex.: `"image"`, `"table"`, `"code"`).
+
+#### Scenario: Imagem ou diagrama envelopado em figura com caption
+- **WHEN** um post inclui uma imagem ou diagrama
+- **THEN** o elemento é declarado via `#figure(image(...), caption: [...], kind: "image")`
+
+#### Scenario: Tabela ou código envelopado em figura com caption
+- **WHEN** um post inclui uma tabela ou bloco de código
+- **THEN** o elemento é declarado via `#figure(table(...), caption: [...], kind: "table")` ou `#figure(```...```, caption: [...], kind: "code")`

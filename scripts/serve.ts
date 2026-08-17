@@ -31,7 +31,7 @@ function broadcastReload(): void {
 }
 
 // Diretórios/arquivos monitorados no modo watch.
-const WATCH_TARGETS = ["posts", "templates", "assets", "scripts", "typst.toml", "refs.bib"];
+const WATCH_TARGETS = ["posts", "templates", "assets", "scripts", "typst.dev.toml", "refs.bib"];
 
 const MIME_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",

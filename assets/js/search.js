@@ -114,3 +114,58 @@
     });
   }
 })();
+
+// Inicialização do Prism.js com mapeamento de data-lang do Typst
+(() => {
+  const initPrism = () => {
+    const langMap = {
+      typ: "typst",
+      js: "javascript",
+      ts: "typescript",
+      py: "python",
+      rb: "ruby",
+      rs: "rust",
+      sh: "bash",
+      yml: "yaml"
+    };
+
+    const codeBlocks = document.querySelectorAll("pre > code[data-lang], pre > code");
+    codeBlocks.forEach((code) => {
+      let lang = code.getAttribute("data-lang");
+      const pre = code.closest("pre");
+      if (lang) {
+        lang = lang.trim().toLowerCase();
+        const mapped = langMap[lang] || lang;
+        code.classList.add(`language-${mapped}`);
+        if (pre) {
+          pre.classList.add(`language-${mapped}`);
+          pre.setAttribute("data-language", lang);
+        }
+      }
+    });
+
+    if (window.Prism) {
+      window.Prism.highlightAll();
+    }
+  };
+
+  // Espera o Prism.js (core + autoloader + gramática typst) carregar antes de destacar.
+  // `defer` preserva a ordem, mas o readyState pode ser "interactive" antes do Prism
+  // estar definido. Usamos um pequeno poll até window.Prism existir.
+  const waitForPrism = (tries = 0) => {
+    if (window.Prism && Prism.languages && (Prism.languages.typst || tries > 20)) {
+      initPrism();
+    } else if (tries > 40) {
+      // desiste silenciosamente (CDN indisponível); blocos continuam legíveis
+      return;
+    } else {
+      setTimeout(() => waitForPrism(tries + 1), 50);
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => waitForPrism());
+  } else {
+    waitForPrism();
+  }
+})();

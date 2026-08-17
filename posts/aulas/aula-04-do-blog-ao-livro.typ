@@ -2,7 +2,7 @@
 
 #let meta = (
   title: "Do Blog ao Livro com Typst novo",
-  date: "2026-08-05",
+  date: "2026-08-17",
   author: "Autor do Blog",
   tags: ("typst", "pdf", "livro", "automação"),
   excerpt: "Como usar o mesmo conteúdo para gerar um blog em HTML e um livro em PDF simultaneamente.",
