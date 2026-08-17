@@ -31,7 +31,18 @@ function broadcastReload(): void {
 }
 
 // Diretórios/arquivos monitorados no modo watch.
-const WATCH_TARGETS = ["posts", "templates", "assets", "scripts", "typst.dev.toml", "refs.bib"];
+// scripts/ já cobre todos os arquivos de build; mantemos as entradas explícitas
+// dos scripts de build novos (SVG) por clareza — `watch` ignora duplicatas.
+const WATCH_TARGETS = [
+  "posts",
+  "templates",
+  "assets",
+  "scripts",
+  "scripts/generate-svg.ts",
+  "scripts/process-svg.ts",
+  "typst.dev.toml",
+  "refs.bib",
+];
 
 const MIME_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",

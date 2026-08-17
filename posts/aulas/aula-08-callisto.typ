@@ -4,7 +4,7 @@
 #let meta = (
   title: "Callisto: renderizando notebooks Jupyter",
   date: "2026-08-19",
-  author: "Autor do Blog",
+  
   tags: ("typst", "callisto", "jupyter", "notebook"),
   excerpt: "Como usar o pacote Callisto para inserir células de notebooks Jupyter em um documento Typst.",
 )
@@ -25,9 +25,7 @@ O primeiro passo é importar o pacote:
   ```typ
   #import "@preview/callisto:0.3.0"
   ```,
-  caption: [Importando o pacote Callisto.],
-  supplement: [Código],
-  kind: "code",
+  caption: [Importando o pacote Callisto.]
 )
 
 Como é mais conveniente configurar o Callisto para trabalhar com um notebook específico, usamos `callisto.config`. O notebook de exemplo está no arquivo `example.ipynb`, e a linha abaixo "carrega" as funções `render`, `Cell`, `In` e `Out` ligadas a ele:
@@ -38,9 +36,7 @@ Como é mais conveniente configurar o Callisto para trabalhar com um notebook es
     nb: path("example.ipynb"),
   )
   ```,
-  caption: [Configurando as funções do Callisto para um notebook.],
-  supplement: [Código],
-  kind: "code",
+  caption: [Configurando as funções do Callisto para um notebook.]
 )
 
 A partir daqui, este próprio documento faz a configuração, então podemos demonstrar o resultado real de cada recurso.
@@ -73,9 +69,7 @@ Para usar o notebook como uma seção de um documento maior, podemos controlar o
   // Cabeçalhos de nível 1 viram subseções
   #render(cmarker: (h1-level: 2))
   ```,
-  caption: [Deslocando o nível dos cabeçalhos Markdown.],
-  supplement: [Código],
-  kind: "code",
+  caption: [Deslocando o nível dos cabeçalhos Markdown.]
 )
 
 Com `h1-level: -1`, um único `H1` do notebook pode virar o título do documento.
@@ -168,9 +162,7 @@ Podemos também estender um tema existente para customizar o comportamento. O ex
     ),
   )
   ```,
-  caption: [Estendendo o tema notebook.],
-  supplement: [Código],
-  kind: "code",
+  caption: [Estendendo o tema notebook.]
 )
 
 == Conclusão

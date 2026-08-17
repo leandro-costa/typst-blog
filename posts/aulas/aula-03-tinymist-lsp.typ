@@ -3,7 +3,7 @@
 #let meta = (
   title: "Tinymist: O LSP para Typst",
   date: "2026-08-10",
-  author: "Autor do Blog",
+  
   tags: ("typst", "tinymist", "lsp", "editor"),
   excerpt: "Conheça o Tinymist, o Language Server Protocol que transforma a experiência de edição de documentos Typst.",
 )

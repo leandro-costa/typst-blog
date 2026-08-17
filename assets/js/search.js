@@ -58,16 +58,47 @@
   });
 })();
 
-// Conecta o TOC da sidebar aos headings reais do post (`.post-content`), na ordem.
+// Conecta o TOC da sidebar às âncoras do SVG do post (corpo via <object>).
+// Como o conteúdo é um SVG embutido num <object>, o clique no TOC deve rolar
+// o documento interno do object até o elemento com o id `sec-N`/`fig-N`.
 (() => {
   const toc = document.querySelector(".toc-list");
-  const content = document.querySelector(".post-content");
-  if (!toc || !content) return;
+  const object = document.querySelector(".post-svg");
+  if (!toc) return;
   const links = toc.querySelectorAll("a");
-  const heads = content.querySelectorAll("h2, h3, h4, h5, h6");
-  heads.forEach((h, i) => {
-    if (!h.id) h.id = "toc-item-" + i;
-    if (links[i]) links[i].href = "#" + h.id;
+
+  links.forEach((link) => {
+    // Item do título do post: rola até o topo do header (HTML), não dentro do SVG.
+    if (link.hasAttribute("data-scroll-top")) {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const header = document.querySelector(".post-header") || document.querySelector(".post");
+        if (header) {
+          const rect = header.getBoundingClientRect();
+          window.scrollTo({ top: window.scrollY + rect.top - 72, behavior: "auto" });
+        }
+      });
+      return;
+    }
+    const anchor = link.getAttribute("data-svg-anchor");
+    if (!anchor) return;
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const obj = object || document.querySelector(".post-svg");
+      if (!obj || !obj.contentDocument) {
+        // Fallback: navega direto para a âncora (abre o SVG puro).
+        const base = link.getAttribute("href")?.split("#")[0] ?? "";
+        window.location.hash = base + anchor;
+        return;
+      }
+      const target = obj.contentDocument.querySelector(anchor);
+      if (target) {
+        const objRect = obj.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const y = window.scrollY + objRect.top + targetRect.top;
+        window.scrollTo({ top: y - 72, behavior: "auto" });
+      }
+    });
   });
 })();
 
@@ -112,60 +143,5 @@
       fsBtn.classList.toggle("active", fs);
       fsBtn.title = fs ? "Sair do modo leitura" : "Modo leitura";
     });
-  }
-})();
-
-// Inicialização do Prism.js com mapeamento de data-lang do Typst
-(() => {
-  const initPrism = () => {
-    const langMap = {
-      typ: "typst",
-      js: "javascript",
-      ts: "typescript",
-      py: "python",
-      rb: "ruby",
-      rs: "rust",
-      sh: "bash",
-      yml: "yaml"
-    };
-
-    const codeBlocks = document.querySelectorAll("pre > code[data-lang], pre > code");
-    codeBlocks.forEach((code) => {
-      let lang = code.getAttribute("data-lang");
-      const pre = code.closest("pre");
-      if (lang) {
-        lang = lang.trim().toLowerCase();
-        const mapped = langMap[lang] || lang;
-        code.classList.add(`language-${mapped}`);
-        if (pre) {
-          pre.classList.add(`language-${mapped}`);
-          pre.setAttribute("data-language", lang);
-        }
-      }
-    });
-
-    if (window.Prism) {
-      window.Prism.highlightAll();
-    }
-  };
-
-  // Espera o Prism.js (core + autoloader + gramática typst) carregar antes de destacar.
-  // `defer` preserva a ordem, mas o readyState pode ser "interactive" antes do Prism
-  // estar definido. Usamos um pequeno poll até window.Prism existir.
-  const waitForPrism = (tries = 0) => {
-    if (window.Prism && Prism.languages && (Prism.languages.typst || tries > 20)) {
-      initPrism();
-    } else if (tries > 40) {
-      // desiste silenciosamente (CDN indisponível); blocos continuam legíveis
-      return;
-    } else {
-      setTimeout(() => waitForPrism(tries + 1), 50);
-    }
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => waitForPrism());
-  } else {
-    waitForPrism();
   }
 })();

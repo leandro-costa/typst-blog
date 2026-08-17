@@ -14,7 +14,8 @@ O site SHALL ser gerado inteiramente pelo Typst via bundle export
 `site.typ` SHALL gerar a home e uma página por post usando `#document(...)`. A home SHALL
 exibir hero, lista de post-cards com `title`, `date`, `author`, `excerpt` e `tags`, além
 de um link para o PDF do livro. Cada página de post SHALL incluir nav/footer e o post
-renderizado a partir do módulo importado. A saída SHALL ir para `dist/`. Os links internos
+exibido como um `<object>` apontando para `posts/<slug>.svg`, com o corpo tipográfico
+renderizado pelo SVG (não como HTML semântico). A saída SHALL ir para `dist/`. Os links internos
 e assets (CSS, JS, posts, tags, categorias, `book.pdf`, `rss.xml`, marca) SHALL usar o base
 path configurado em vez de caminhos absolutos de raiz.
 

@@ -16,9 +16,6 @@
   html.elem("title", page-title)
   html.elem("link", attrs: (rel: "stylesheet", href: base + "/assets/css/style.css"))
   html.elem("script", attrs: (src: base + "/assets/js/search.js", defer: "defer"))
-  html.elem("script", attrs: (src: "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js", defer: "defer"))
-  html.elem("script", attrs: (src: "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js", defer: "defer"))
-  html.elem("script", attrs: (src: base + "/assets/js/prism-typst.js", defer: "defer"))
 }
 
 #let category-label(t) = if t == "aula" { "Aulas" } else if t == "exercicio" { "Exercícios" } else if t == "solucao" { "Soluções" } else if t == "trabalho" { "Trabalhos" } else { t }

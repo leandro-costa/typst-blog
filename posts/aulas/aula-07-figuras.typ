@@ -4,7 +4,7 @@
 #let meta = (
   title: "Figuras: código, tabela, imagem e diagrama",
   date: "2026-08-18",
-  author: "Autor do Blog",
+  
   tags: ("typst", "figuras", "tutorial"),
   excerpt: "Como usar os quatro tipos de figura no Typst — código, tabela, imagem e diagrama — sempre com legenda.",
 )
@@ -22,9 +22,7 @@ Para incluir um trecho de código, use um bloco delimitado por três crases e en
   #let saudacao(nome) = [#text(size: 1.2em)["Olá, #nome!"]]
   #saudacao("Mundo")
   ```,
-  caption: [Função simples em Typst.],
-  supplement: [Código],
-  kind: "code",
+  caption: [Função simples em Typst.]
 )
 
 == Tabela
@@ -39,9 +37,7 @@ Tabelas também são figuras. Use a sintaxe nativa de tabela do Typst e informe 
     [Python], [Script], [Automação],
     [Bash], [Shell], [Comandos],
   ),
-  caption: [Comparação entre linguagens usadas no curso.],
-  supplement: [Tabela],
-  kind: "table",
+  caption: [Comparação entre linguagens usadas no curso.]
 )
 
 == Imagem
@@ -58,9 +54,7 @@ Imagens entram com `image("caminho.ext")`. Aqui usamos um conteúdo gerado como 
       #text(size: 1.4em, fill: white)[Imagem de exemplo]
     ],
   ),
-  caption: [Ilustração de exemplo para demonstrar o uso de `#figure`.],
-  supplement: [Imagem],
-  kind: "image",
+  caption: [Ilustração de exemplo para demonstrar o uso de `#figure`.]
 )
 
 == Diagrama
@@ -74,29 +68,27 @@ Um diagrama pode ser desenhado com primitivas do Typst (`rect`, `line`, `circle`
     column-gutter: 1.5em,
     row-gutter: 1em,
     align(center)[
-      box(width: 100%, height: 1.6cm, fill: rgb(238, 242, 255), radius: 4pt, inset: 0.4em)[
+      #box(width: 100%, height: 1.6cm, fill: rgb(238, 242, 255), radius: 4pt, inset: 0.4em)[
         #text(weight: "bold")[Post .typ]
       ]
     ],
     align(center)[
-      box(width: 100%, height: 1.6cm, fill: rgb(238, 242, 255), radius: 4pt, inset: 0.4em)[
+      #box(width: 100%, height: 1.6cm, fill: rgb(238, 242, 255), radius: 4pt, inset: 0.4em)[
         #text(weight: "bold")[Template .typ]
       ]
     ],
     align(center)[
-      box(width: 100%, height: 1.6cm, fill: rgb(254, 243, 199), radius: 4pt, inset: 0.4em)[
+      #box(width: 100%, height: 1.6cm, fill: rgb(254, 243, 199), radius: 4pt, inset: 0.4em)[
         #text(weight: "bold")[Build (Bun)]
       ]
     ],
     align(center)[
-      box(width: 100%, height: 1.6cm, fill: rgb(220, 252, 231), radius: 4pt, inset: 0.4em)[
+      #box(width: 100%, height: 1.6cm, fill: rgb(220, 252, 231), radius: 4pt, inset: 0.4em)[
         #text(weight: "bold")[Site + PDF]
       ]
     ],
   ),
-  caption: [Fluxo do build: conteúdo vira site e livro.],
-  supplement: [Diagrama],
-  kind: "diagram",
+  caption: [Fluxo do build: conteúdo vira site e livro.]
 )
 
 == Conclusão

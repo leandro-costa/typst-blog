@@ -1,7 +1,8 @@
 // templates/book.typ
-// Livro em A4: capa, página de rosto, sumário e capítulos.
+// Livro em A4: capa, p��gina de rosto, sum��rio e cap��tulos.
+// A tipografia do artigo é definida no arquivo comum templates/typography.typ.
 
-#import "codly.typ": apply-codly
+#import "typography.typ": article-style
 
 #let book-template(
   title: "Livro",
@@ -17,10 +18,6 @@
     numbering: "1",
     number-align: center + bottom,
   )
-
-  set text(size: 11pt, lang: "pt", region: "BR")
-  set heading(numbering: "1.")
-  set par(justify: true, leading: 0.65em)
 
   // Capa
   page(margin: 0cm)[
@@ -74,5 +71,5 @@
 
   // Conteúdo
   pagebreak()
-  apply-codly(body)
+  article-style(body)
 }

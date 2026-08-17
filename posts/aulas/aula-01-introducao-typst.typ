@@ -3,7 +3,7 @@
 #let meta = (
   title: "Aula 01 - Introdução ao Typst",
   date: "2026-08-14 11:00:00",
-  author: "Autor do Blog",
+  
   tags: ("typst", "typesetting", "tutorial"),
   excerpt: "Uma introdução ao Typst, o sistema de tipografia moderno que substitui o LaTeX.",
 )

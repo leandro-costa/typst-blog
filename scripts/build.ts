@@ -17,6 +17,8 @@ import { loadPosts } from "./parse-posts.ts";
 import { generateSite } from "./generate-site.ts";
 import { generateBook } from "./generate-book.ts";
 import { writeSearchIndex, writeRss } from "./static-outputs.ts";
+import { generateSvgs } from "./generate-svg.ts";
+import { processSvgs } from "./process-svg.ts";
 
 const POSTS_DIR = "posts";
 const DIST_DIR = "dist";
@@ -86,6 +88,13 @@ async function build(): Promise<void> {
     throw new Error("Falha ao compilar o site");
   }
   console.log("   ✓ Site compilado\n");
+
+  // 4b. Gera os SVGs dos posts (fieis à tipografia, com âncoras sec-N/fig-N)
+  console.log("🖼️  Gerando SVGs dos posts...");
+  await generateSvgs(posts);
+  // 4c. Pós-processa os SVGs: injeta id="sec-N"/"fig-N" navegáveis
+  await processSvgs(posts);
+  console.log("   ✓ SVGs gerados e âncoras injetadas\n");
 
   // 5. Gera book.typ
   console.log("📝 Gerando book.typ...");

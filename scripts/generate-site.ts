@@ -19,6 +19,22 @@ function recentPosts(posts: Post[], n: number): Post[] {
     .slice(0, n);
 }
 
+// Replica a numeração de headings do Typst (`set heading(numbering: "1.")` +
+// título contando como nível 1 via `step(level: 1)`). Recebe a lista de itens
+// com seus níveis (o título entra como `{ level: 1 }`) e retorna o número de
+// cada item ("1", "1.1", "1.2.1", ...), zerando níveis mais profundos.
+function tocNumbering(items: { level: number }[]): string[] {
+  const counters: number[] = [];
+  return items.map((item) => {
+    const lvl = item.level;
+    counters[lvl] = (counters[lvl] ?? 0) + 1;
+    for (let i = lvl + 1; i < counters.length; i++) counters[i] = 0;
+    const parts: number[] = [];
+    for (let i = 1; i <= lvl; i++) parts.push(counters[i] ?? 0);
+    return parts.join(".");
+  });
+}
+
 // Extrai headings reais (`=`, `==`, ...) do corpo de um post, ignorando blocos
 // de código (fenced code blocks). Retorna nível e texto limpo para o TOC.
 function parseToc(body: string): { level: number; text: string }[] {
@@ -154,11 +170,15 @@ lines.push("  #let sidebar-sections = [");
     lines.push('          #html.elem("h4")[Neste post]');
     lines.push('          #html.elem("button", attrs: (id: "toggle-sidebar", class: "icon-btn icon-btn-sm", type: "button", title: "Mostrar/ocultar sumário", "aria-label": "Mostrar/ocultar sumário"))[☰]');
     lines.push('        ]');
-    if (toc.length > 0) {
+if (toc.length > 0) {
+      const nums = tocNumbering([{ level: 1 }, ...toc]);
       lines.push('        #html.elem("ol", attrs: (class: "toc-list"))[');
-      toc.forEach((item, idx) => {
+      lines.push(`          #html.elem("li", attrs: (class: "toc-l1"))[`);
+      lines.push(`            #html.elem("a", attrs: (href: base + "/posts/${p.meta.slug}.html#post-title", "data-scroll-top": "true"))[#text("${nums[0]}. ${escapeTypstString(p.meta.title)}")]`);
+      lines.push("          ]");
+toc.forEach((item, idx) => {
         lines.push(`          #html.elem("li", attrs: (class: "toc-l${item.level}"))[`);
-        lines.push(`            #html.elem("a", attrs: (href: "#toc-item-${idx}"))[#text("${escapeTypstString(item.text)}")]`);
+        lines.push(`            #html.elem("a", attrs: (href: base + "/posts/${p.meta.slug}.html#sec-${idx}", "data-svg-anchor": "#sec-${idx}"))[#text("${nums[idx + 1]}. ${escapeTypstString(item.text)}")]`);
         lines.push("          ]");
       });
       lines.push("        ]");
@@ -172,7 +192,7 @@ lines.push("  #let sidebar-sections = [");
 
     lines.push(`  #document("posts/${p.meta.slug}.html", title: [#${ident}.meta.title])[`);
     lines.push(`    #site-layout(title: [#${ident}.meta.title], brand: [${escapeTypstString(siteTitle)}], sidebar: post-sidebar, sidebar-left: true, categories: categories-meta)[`);
-    lines.push(`      #post-layout(${ident}.meta, ${ident}.body, default-author: "${escapeTypstString(siteAuthor)}")`);
+    lines.push(`      #post-layout(${ident}.meta, ${ident}.body, default-author: "${escapeTypstString(siteAuthor)}", slug: "${escapeTypstString(p.meta.slug)}")`);
     lines.push(`      #post-nav(prev: ${prev ? metaToTypstTuple(prev, siteAuthor) : "none"}, next: ${next ? metaToTypstTuple(next, siteAuthor) : "none"})`);
     lines.push("    ]");
     lines.push("  ]");
