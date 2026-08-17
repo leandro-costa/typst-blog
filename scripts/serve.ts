@@ -40,7 +40,7 @@ const WATCH_TARGETS = [
   "scripts",
   "scripts/generate-svg.ts",
   "scripts/process-svg.ts",
-  "typst.dev.toml",
+  "typst.toml",
   "refs.bib",
 ];
 
