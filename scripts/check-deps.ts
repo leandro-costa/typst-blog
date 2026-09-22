@@ -2,7 +2,8 @@
 // callisto (versão pinada) e notebooks .ipynb referenciados.
 // Falha com mensagem clara indicando o que instalar + exit(1) no build.
 
-import { runCommand, exists, readTextFile } from "./lib.ts";
+import { runCommand, exists, readTextFile, listTypFiles } from "./lib.ts";
+import { findExportDocs } from "./callisto-export.ts";
 
 const MIN_TYPST = "0.15.1";
 const MIN_BUN = "1.0.0";
@@ -28,36 +29,6 @@ async function tryRun(cmd: string, args: string[]): Promise<string | null> {
 }
 
 /** Coleta todos os arquivos .typ relevantes (posts + raiz + templates). */
-async function listTypFiles(dirs: string[]): Promise<string[]> {
-  const { readdir } = await import("node:fs/promises");
-  const out: string[] = [];
-  async function walk(dir: string): Promise<void> {
-    let entries;
-    try {
-      entries = await readdir(dir, { withFileTypes: true });
-    } catch {
-      return;
-    }
-    for (const e of entries) {
-      const p = `${dir}/${e.name}`;
-      if (e.isDirectory()) await walk(p);
-      else if (e.isFile() && e.name.endsWith(".typ")) out.push(p);
-    }
-  }
-  for (const d of dirs) {
-    if (await exists(d)) {
-      // arquivos soltos na raiz (documento.typ) + diretórios
-      try {
-        const st = await (await import("node:fs/promises")).stat(d);
-        if (st.isFile() && d.endsWith(".typ")) out.push(d);
-        else await walk(d);
-      } catch {
-        /* ignora */
-      }
-    }
-  }
-  return out;
-}
 
 interface NotebookUse {
   path: string; // caminho do .ipynb resolvido
@@ -175,7 +146,7 @@ export async function checkDeps(): Promise<void> {
   }
 
   // 3. callisto: versão pinada única em todos os .typ
-  const typFiles = await listTypFiles(["posts", "templates", "documento.typ"]);
+  const typFiles = await listTypFiles(["posts", "templates"]);
   const versions = new Set<string>();
   for (const f of typFiles) {
     const text = await readTextFile(f);
@@ -194,12 +165,19 @@ export async function checkDeps(): Promise<void> {
     console.log(`   ✓ callisto ${[...versions][0]} (pinada, consistente)`);
   }
 
-  // 4. ipynb referenciados pelo callisto
+  // 4. ipynb referenciados pelo callisto (exceto os gerados pelo próprio
+  // build em modo exportação — o sync os cria na etapa 0b)
+  const exportDocsPre = await findExportDocs();
+  const generated = new Set(exportDocsPre.flatMap((d) => d.notebooks));
   const nbPaths = await findNotebookUses(typFiles);
   let needsJava = false;
   let needsDot = false;
   for (const nbPath of nbPaths) {
-    if (!(await exists(nbPath))) {
+    if (generated.has(nbPath)) {
+      console.log(`   · notebook gerado pelo build: ${nbPath}`);
+      // Se já existir (ex.: commitado), valida o conteúdo; senão o sync cria.
+      if (!(await exists(nbPath))) continue;
+    } else if (!(await exists(nbPath))) {
       errors.push(
         `Notebook referenciado não existe: ${nbPath}.\n` +
           `  → Verifique o nb: path("...") no .typ correspondente.`
@@ -245,6 +223,23 @@ export async function checkDeps(): Promise<void> {
     }
   } else {
     console.log("   · graphviz: não exigido (só sequência ou sem plantuml)");
+  }
+
+  // 4b. jupyter (só se há docs em modo exportação do callisto)
+  const exportDocs = exportDocsPre;
+  if (exportDocs.length > 0) {
+    const jupyterOut = await tryRun("jupyter", ["--version"]);
+    if (!jupyterOut) {
+      errors.push(
+        "jupyter não encontrado no PATH (necessário p/ exportar+executar notebooks do callisto).\n  → Instale: pip install jupyter nbconvert"
+      );
+    } else {
+      console.log(
+        `   ✓ jupyter (${exportDocs.length} doc(s) em modo exportação)`
+      );
+    }
+  } else {
+    console.log("   · jupyter: não exigido (sem docs em modo exportação)");
   }
 
   if (errors.length > 0) {

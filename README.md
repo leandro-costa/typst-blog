@@ -42,6 +42,16 @@ O `bun run build` começa verificando todo o toolchain em `scripts/check-deps.ts
 | `graphviz` (`dot`) | — | se algum diagrama exige (classe, atividade, estado…; sequência funciona sem) |
 | `callisto` (pacote Typst) | versão única pinada (hoje 0.3.0) | se há `#import "@preview/callisto:…"` |
 | notebooks `.ipynb` | nbformat 4, JSON válido | todo `nb: path("…")` do Callisto deve existir; células `%%plantuml` devem trazer o output `image/png` salvo (diagrama gerado localmente, offline) |
+| `jupyter` (+ `nbconvert`) | — | se há docs em modo exportação (`kernel:` no `config` + `#stage-notebook()`) |
+
+### Notebooks exportados do Callisto (automático no build)
+
+Docs `.typ` em modo exportação (`callisto.config` com `kernel:` e `#stage-notebook()`)
+têm seus blocos de código exportados e executados automaticamente pelo
+`scripts/callisto-export.ts` (etapa 0b do build — vale para `bun run build` e
+`bun run dev`): `typst eval` grava o `.ipynb` (UTF-8) e `nbconvert --execute`
+preenche os outputs. É incremental — só roda quando o `.typ` mudou. O `.ipynb`
+alvo é descoberto no próprio `.typ` (`nb: path("…")`), sem nome fixo.
 
 ## Como escrever um post
 

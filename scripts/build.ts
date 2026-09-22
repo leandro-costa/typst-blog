@@ -20,6 +20,7 @@ import { writeSearchIndex, writeRss } from "./static-outputs.ts";
 import { generateSvgs } from "./generate-svg.ts";
 import { processSvgs } from "./process-svg.ts";
 import { checkDeps } from "./check-deps.ts";
+import { syncExportNotebooks } from "./callisto-export.ts";
 
 const POSTS_DIR = "posts";
 const DIST_DIR = "dist";
@@ -33,6 +34,12 @@ async function build(): Promise<void> {
 
   // 0. Verifica o toolchain (typst, bun, java, graphviz, callisto, ipynb)
   await checkDeps();
+
+  // 0b. Exporta+executa notebooks de docs em modo exportação (callisto).
+  // Roda em `bun run build` e, via rebuild, em `bun run dev`.
+  console.log("📓 Sincronizando notebooks exportados (callisto)...");
+  await syncExportNotebooks();
+  console.log();
 
   // 0. Carrega configuração do typst.toml
   console.log(`⚙️  Lendo configuração de ${CONFIG_FILE}...`);

@@ -91,3 +91,21 @@ que instalar e `exit(1)`.
 #### Scenario: Notebook com plantuml não executado
 - **WHEN** uma célula `%%plantuml` não tem output `image/png` salvo no `.ipynb`
 - **THEN** o build aborta orientando a executar e salvar o notebook no Jupyter
+
+### Requirement: Sincronização de notebooks exportados do Callisto
+
+O build SHALL detectar docs `.typ` em modo exportação (`callisto.config` com `kernel:`
+e `#stage-notebook()`) e, para cada `nb: path("...")` declarado, exportar o notebook
+(`typst eval --input callisto-export=true`, gravando UTF-8 sem BOM) e executá-lo
+(`jupyter nbconvert --execute --inplace`) antes de compilar. A sincronização SHALL ser
+incremental (só quando o `.typ` está mais novo que o `.ipynb`) e SHALL falhar o build
+com mensagem clara em caso de erro. O `check-deps` SHALL exigir o binário `jupyter`
+quando houver docs em modo exportação.
+
+#### Scenario: Notebook desatualizado é regenerado
+- **WHEN** o build executa e um `.typ` em modo exportação está mais novo que seu `.ipynb`
+- **THEN** o notebook é re-exportado e re-executado antes da compilação
+
+#### Scenario: Notebook atualizado é pulado
+- **WHEN** o `.ipynb` está mais novo que o `.typ`
+- **THEN** a exportação/execução é pulada e o build prossegue

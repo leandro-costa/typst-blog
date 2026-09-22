@@ -18,7 +18,7 @@ Here is a plot of $y = x^2$ :
 import matplotlib.pyplot as plt
 plt.rcParams['figure.figsize'] = (3, 2)
 x = [1, 2, 3, 4]
-y = [1, 4, 9, 16]
+y = [1, 2, 9, 16]
 plt.plot(x, y);
 ```
 

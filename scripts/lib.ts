@@ -183,3 +183,33 @@ export interface Post {
   body: string; // conteúdo typst sem os metadados
   filename: string;
 }
+
+// Lista arquivos .typ a partir de diretórios e/ou arquivos soltos.
+export async function listTypFiles(entries: string[]): Promise<string[]> {
+  const fs = await import("node:fs/promises");
+  const out: string[] = [];
+  async function walk(dir: string): Promise<void> {
+    let dirents;
+    try {
+      dirents = await fs.readdir(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const e of dirents) {
+      const p = `${dir}/${e.name}`;
+      if (e.isDirectory()) await walk(p);
+      else if (e.isFile() && e.name.endsWith(".typ")) out.push(p);
+    }
+  }
+  for (const entry of entries) {
+    if (!(await exists(entry))) continue;
+    try {
+      const st = await fs.stat(entry);
+      if (st.isFile() && entry.endsWith(".typ")) out.push(entry);
+      else await walk(entry);
+    } catch {
+      /* ignora */
+    }
+  }
+  return out;
+}
