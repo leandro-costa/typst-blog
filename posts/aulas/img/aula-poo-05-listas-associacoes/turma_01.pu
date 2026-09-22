@@ -1,0 +1,28 @@
+@startuml
+class Turma {
+  - String nome
+  - List<Aluno> alunos
+  - List<Professor> professores
+  Turma(String nome)
+  + adicionarAluno(Aluno aluno)
+  + adicionarProfessor(Professor professor)
+}
+class Aluno {
+  - String nome
+  - String matricula
+  - List<Turma> turmas
+  Aluno(String nome, String Matricula)
+  + adicionarTurma(Turma turma)
+}
+class Professor {
+  - String nome
+  - List<Turma> turmas
+  Professor(String nome)
+  + adicionarTurma(Turma turma)
+}
+
+Turma --> "0..*" Aluno : alunos
+Aluno --> "0..*" Turma : turmas
+Turma --> "0..*" Professor : professores
+Professor --> "0..*" Turma : turmas
+@enduml

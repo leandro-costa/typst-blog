@@ -1,0 +1,24 @@
+@startuml
+
+interface Usuario {
+    + autenticar(): boolean
+}
+
+class Funcionario
+
+class Gerente
+
+class Cliente
+
+class PessoaJuridica
+
+class AutenticadorDeUsuario {
+    + autentica(Usuario): boolean
+}
+
+Funcionario <|-- Gerente
+Cliente <|-- PessoaJuridica
+Gerente ..|> Usuario
+PessoaJuridica ..|> Usuario
+AutenticadorDeUsuario ..> Usuario
+@enduml

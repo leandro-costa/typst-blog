@@ -1,0 +1,31 @@
+@startuml
+
+skinparam defaultFontSize 14
+skinparam classBackgroundColor #98FB98
+skinparam classBorderColor SeaGreen
+skinparam classHeaderBackgroundColor #66CDAA
+
+class Criatura {
+    __ 🧬 Essência (Atributos) __
+    nome : String
+    vida : int
+    tipo : String
+    forca : int
+    == 🌅 Ritual de Nascimento (Construtor) ==
+    Criatura(nome, vida, tipo, forca)
+    Criatura(nome)
+    == ⚡ Poderes (Métodos) ==
+    atacar(alvo : Criatura) : void
+    receberDano(dano : int) : void
+    exibirStatus() : void
+    estaViva() : boolean
+}
+
+note right of Criatura
+  📐 **Molde** = Classe
+  🧬 **Essência** = Atributos
+  🌅 **Ritual** = Construtor
+  ⚡ **Poderes** = Métodos
+  🐾 **Criatura** = Objeto (instância)
+end note
+@enduml

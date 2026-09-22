@@ -1,0 +1,21 @@
+@startuml
+
+rectangle Memoria {
+    card gerente
+    card funcionario
+
+    agent objeto [
+    Gerente
+    ----
+    nome: "Leandro"
+    cpf: "123.456.789-00"
+    salario: 5000.0
+    senha: 1234
+    numeroDeFuncionariosGerenciados: 10
+    ----
+    ]
+
+    gerente --> objeto
+    funcionario --> objeto
+}
+@enduml

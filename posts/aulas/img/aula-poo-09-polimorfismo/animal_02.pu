@@ -1,0 +1,18 @@
+@startuml
+
+class Animal{
+    + mover()
+}
+class Peixe{
+    + mover()
+}
+class Anfibio{
+    + mover()
+}
+class Passaro{
+    + mover()
+}
+Animal <|-- Peixe
+Animal <|-- Anfibio
+Animal <|-- Passaro
+@enduml

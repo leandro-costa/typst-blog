@@ -1,0 +1,21 @@
+@startuml
+
+skinparam defaultFontSize 13
+
+class Produto {
+    - String nome
+    - double preco
+    - Fornecedor fornecedor
+    + Produto(String nome, double preco, Fornecedor fornecedor)
+    + String toString()
+}
+
+class Fornecedor {
+    - String nome
+    - String cnpj
+    + Fornecedor(String nome, String cnpj)
+    + String toString()
+}
+
+Produto o--> Fornecedor : 🎒 agregação
+@enduml

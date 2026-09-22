@@ -1,0 +1,12 @@
+@startuml Criando um objeto a partir da subclasse
+
+label "new Emprestimo()"
+
+rectangle "Emprestimo" #palegreen;line:green;text:green{
+label "..." #palegreen;text:green
+rectangle "Servico" #aliceblue;line:blue;text:blue{
+label "..." #aliceblue;text:blue   
+}
+} 
+
+@enduml

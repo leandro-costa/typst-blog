@@ -1,0 +1,53 @@
+@startuml
+skinparam style strictuml
+
+autoactivate on
+
+participant Universo
+participant "fenix:Criatura" as fenix
+participant "smaug:Criatura" as smaug
+
+create fenix
+Universo -> fenix : new
+create smaug
+Universo -> smaug : new
+
+Universo -> fenix : exibirStatus()
+note right
+  Fênix [Ave de Fogo] - Vida: 100
+end note
+return
+Universo -> smaug : exibirStatus()
+note right
+  Smaug [Dragão] - Vida: 200
+end note
+return
+
+Universo -> fenix : atacar(smaug)
+fenix -> smaug : receberDano(fenix.forca)
+note right
+  Dano de 30
+end note
+return
+return
+
+Universo -> smaug : atacar(fenix)
+smaug -> fenix : receberDano(smaug.forca)
+note right
+  Dano de 50
+end note
+return
+return
+
+Universo -> fenix : exibirStatus()
+note right
+  Fênix [Ave de Fogo] - Vida: 50
+end note
+return
+Universo -> smaug : exibirStatus()
+note right
+  Smaug [Dragão] - Vida: 170
+end note
+return
+
+@enduml

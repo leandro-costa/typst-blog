@@ -1,0 +1,24 @@
+@startuml
+skinparam style strictuml
+
+autoactivate on
+
+participant Universo
+participant "c1:Conta" as c1
+participant "c2:Conta" as c2
+
+create c1
+Universo -> c1 : new Conta(1, "Leandro")
+create c2
+Universo -> c2 : new Conta(2, "Maria")
+
+Universo -> c1 : depositar(1000)
+return
+
+Universo -> c1 : transferir(c2, 200)
+c1 -> c1 : sacar(200)
+return true
+c1 -> c2 : depositar(200)
+return
+return true
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+class Servico{
+    - Cliente contratante
+    - Funcionario responsavel 
+    - LocalDate dataDeContratacao 
+}
+class SeguroDeVeiculo{
+    - Veiculo veiculo 
+    - double valorDoSeguroDeVeiculo 
+    - double franquia 
+    
+}
+class Emprestimo{
+    - double valor 
+    - double taxa 
+}
+Servico <|-- SeguroDeVeiculo
+Servico <|-- Emprestimo
+@enduml

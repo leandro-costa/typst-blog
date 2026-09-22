@@ -1,0 +1,22 @@
+@startuml
+
+abstract class Pessoa {
+    # int matricula
+    # String nome
+    + entrar()
+    + {abstract} estacionar()
+}
+
+class Aluno {
+    - double media
+    + estacionar()
+}
+
+class Professor {
+    - double salario
+    + estacionar()
+}
+
+Pessoa <|-- Aluno
+Pessoa <|-- Professor
+@enduml

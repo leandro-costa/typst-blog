@@ -1,0 +1,12 @@
+@startuml Criando um objeto a partir da subclasse
+
+label "new Morcego()"
+
+rectangle "Morcego" #palegreen;line:green;text:green{
+label "tamanhoPresa\nvoar()" #palegreen;text:green   
+rectangle "Mamifero" #aliceblue;line:blue;text:blue{
+label "altura\npeso\nmamar()" #aliceblue;text:blue
+}
+} 
+
+@enduml

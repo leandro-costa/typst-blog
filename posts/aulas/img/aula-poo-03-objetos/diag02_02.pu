@@ -1,0 +1,15 @@
+@startuml
+
+skinparam defaultFontSize 13
+
+rectangle "Memória" {
+    map "Criatura" as c1m #98FB98 {
+        nome => "Fênix Renascida"
+        vida => 100
+    }
+    rectangle "c1" as c1 #lightyellow
+    rectangle "c2" as c2 #lightyellow
+    c1m<--c1
+    c1m<--c2
+}
+@enduml

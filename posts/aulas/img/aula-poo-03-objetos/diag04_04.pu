@@ -1,0 +1,27 @@
+@startuml
+
+skinparam defaultFontSize 13
+
+rectangle "Memória" {
+    map "Criatura" as c1m #98FB98 {
+        nome => "Fênix"
+        vida => 100
+    }
+    map "Criatura" as c2m #98FB98 {
+        nome => "Fênix"
+        vida => 100
+    }
+    rectangle "c1" as c1 #lightyellow
+    rectangle "c2" as c2 #lightyellow
+    c1m<--c1
+    c2m<--c2
+}
+
+note bottom of c1m
+  Endereço: 0x001
+end note
+
+note bottom of c2m
+  Endereço: 0x002
+end note
+@enduml

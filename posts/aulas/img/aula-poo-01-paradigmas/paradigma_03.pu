@@ -1,0 +1,22 @@
+@startuml
+
+skinparam defaultFontSize 13
+
+package "Paradigma Estruturado" {
+   node "Dados\n(struct Criatura)" as dados #FFA07A
+   storage "receberDano()" as f1
+   storage "exibirStatus()" as f2
+
+   dados --> f1 : passa dados
+   dados --> f2 : passa dados
+}
+
+package "Paradigma Orientado a Objetos" {
+   rectangle "Classe Criatura" {
+      node "nome, vida" as atrib #98FB98
+      node "receberDano()\nexibirStatus()" as met #98FB98
+      atrib --> met
+      met --> atrib
+   }
+}
+@enduml

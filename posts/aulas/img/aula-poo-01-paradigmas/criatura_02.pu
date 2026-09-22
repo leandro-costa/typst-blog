@@ -1,0 +1,22 @@
+@startuml
+
+skinparam defaultFontSize 14
+skinparam classBackgroundColor #98FB98
+skinparam classBorderColor SeaGreen
+
+class Criatura {
+    __ Essência (Dados-TEM) __
+    nome
+    vida
+    == Poderes (Métodos-FAZ) ==
+    receberDano()
+    exibirStatus()
+}
+
+note right of Criatura
+  Dados e comportamentos
+  vivem <b>juntos</b>,
+  protegidos dentro
+  do corpo da criatura
+end note
+@enduml

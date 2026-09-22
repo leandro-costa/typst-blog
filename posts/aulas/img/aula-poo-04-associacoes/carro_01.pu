@@ -1,0 +1,27 @@
+@startuml
+
+skinparam defaultFontSize 13
+
+class Carro {
+    - String cor
+    - String marca
+    - int velocidade
+    - Motor motor
+    + Carro(String cor, String marca, Motor motor)
+    + void acelerar()
+    + void parar()
+    + String toString()
+}
+
+class Motor {
+    - int cavalos
+    - int rotacoes
+    + Motor(int cavalos)
+    + void aumentarGiros()
+    + void diminuirGiros()
+    + int trabalhoDoMotor()
+    + String toString()
+}
+
+Carro --> Motor
+@enduml

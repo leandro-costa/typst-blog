@@ -1,0 +1,18 @@
+@startuml 
+hide footbox
+actor Clinte
+
+create Emprestimo
+Clinte -> Emprestimo : new
+activate Emprestimo
+
+
+Emprestimo -> Servico 
+ref over Servico
+  IO.println("Servico");
+end ref
+Emprestimo -> Emprestimo 
+ref over Emprestimo
+  IO.println("Emprestimo");
+end ref
+@enduml

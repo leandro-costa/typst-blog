@@ -1,0 +1,31 @@
+@startuml
+
+skinparam defaultFontSize 13
+
+class Carrinho {
+    - List<ItemCompra> itens
+    - double valorTotal
+    + Carrinho()
+    + void adicionarProduto(Produto produto, int quantidade)
+    + double calcularTotal()
+    + String toString()
+}
+
+class ItemCompra {
+    - Produto produto
+    - int quantidade
+    + ItemCompra(Produto produto, int quantidade)
+    + double getSubtotal()
+    + String toString()
+}
+
+class Produto {
+    - String nome
+    - double preco
+    + Produto(String nome, double preco)
+    + String toString()
+}
+
+Carrinho *--> ItemCompra : 🧩 composição
+ItemCompra o--> Produto : 🎒 agregação
+@enduml

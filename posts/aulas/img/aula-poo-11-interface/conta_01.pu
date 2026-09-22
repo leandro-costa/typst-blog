@@ -1,0 +1,22 @@
+@startuml
+
+interface Conta {
+    + deposita(double)
+    + saca(double)
+}
+
+class ContaPoupanca {
+    - double saldo
+    + deposita(double)
+    + saca(double)
+}
+
+class ContaCorrente {
+    - double saldo
+    + deposita(double)
+    + saca(double)
+}
+
+Conta <|.. ContaPoupanca
+Conta <|.. ContaCorrente
+@enduml

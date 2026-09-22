@@ -1,0 +1,23 @@
+@startuml
+
+abstract class Figura {
+    - String cor
+    + Figura(String)
+    + getCor(): String
+    + {abstract} desenhar()
+}
+
+class Circulo {
+    - double raio
+    + desenhar()
+}
+
+class Retangulo {
+    - double largura
+    - double altura
+    + desenhar()
+}
+
+Figura <|-- Circulo
+Figura <|-- Retangulo
+@enduml

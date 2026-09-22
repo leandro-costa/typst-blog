@@ -1,0 +1,12 @@
+@startuml Criando um objeto a partir da subclasse
+
+label "new Gerente()"
+
+rectangle "Gerente" #palegreen;line:green;text:green{
+label "senha\nnumeroDeFuncionariosGerenciados\nautentica()" #palegreen;text:green
+rectangle "Funcionario" #aliceblue;line:blue;text:blue{
+label "nome\ncpf\nsalario" #aliceblue;text:blue   
+}
+} 
+
+@enduml

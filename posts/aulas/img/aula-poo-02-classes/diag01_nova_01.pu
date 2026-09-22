@@ -1,0 +1,34 @@
+@startuml
+
+skinparam defaultFontSize 13
+
+left to right direction
+
+map "📐 Molde: Criatura" as molde #lightyellow;line:goldenrod {
+   nome =>
+  vida =>
+  tipo =>
+}
+
+map "🐾 fenix" as fenix {
+  nome => "Fênix"
+  vida => 100
+  tipo => "Ave de Fogo"
+}
+
+map "🐾 smaug" as smaug {
+  nome => "Smaug"
+  vida => 200
+  tipo => "Dragão"
+}
+
+map "🐾 arthas" as arthas {
+  nome => "Arthas"
+  vida => 150
+  tipo => "Guerreiro"
+}
+
+molde --> fenix : new
+molde --> smaug : new
+molde --> arthas : new
+@enduml

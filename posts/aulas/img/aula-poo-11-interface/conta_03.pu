@@ -1,0 +1,19 @@
+@startuml
+
+interface Conta {
+    + deposita(double)
+    + saca(double)
+}
+
+interface Tributavel {
+    + calcularTributo()
+}
+
+interface ContaTributavel
+
+class ContaInvestimento
+
+Conta <|-- ContaTributavel
+Tributavel <|-- ContaTributavel
+ContaTributavel <|.. ContaInvestimento
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+
+class Mamifero{
+    -int altura
+    -double peso
+    +void mamar()
+}
+
+class Morcego{
+    -double tamanhoPresa
+    +void voar()
+}
+
+Mamifero <|-- Morcego
+@enduml

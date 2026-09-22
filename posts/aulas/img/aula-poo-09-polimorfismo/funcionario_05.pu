@@ -1,0 +1,8 @@
+@startuml
+
+class Funcionario {
+    + getCodigo()
+}
+class Gerente extends Funcionario
+class Telefonista extends Funcionario
+@enduml

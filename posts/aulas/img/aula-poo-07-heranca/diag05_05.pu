@@ -1,0 +1,7 @@
+@startuml
+Funcionario <|-- Engenheiro
+Funcionario <|-- Secretario
+Funcionario <|-- Gerente
+Gerente <|-- Diretor
+
+@enduml

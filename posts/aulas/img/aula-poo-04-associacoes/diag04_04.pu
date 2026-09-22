@@ -1,0 +1,32 @@
+@startuml
+
+skinparam defaultFontSize 14
+
+rectangle "🎒 Agregação" as ag #lightyellow {
+    map "Guerreiro" as g1 {
+        nome => "Arthas"
+    }
+    map "Espada" as e1 {
+        nome => "Frostmourne"
+    }
+    g1 ..> e1 : possui
+    note bottom of e1
+      A espada existe
+      sem o guerreiro
+    end note
+}
+
+rectangle "🧩 Composição" as comp #lightgreen {
+    map "Guerreiro" as g2 {
+        nome => "Arthas"
+    }
+    map "Coração" as c1 {
+        batimentos => 72
+    }
+    g2 *--> c1 : contém
+    note bottom of c1
+      O coração morre
+      com o guerreiro
+    end note
+}
+@enduml

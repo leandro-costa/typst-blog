@@ -1,0 +1,17 @@
+@startuml
+
+map "animal ----> 🐟 Peixe: Nemo" as nemo {
+    nome => "Nemo"
+}
+
+map "animal ----> 🐸 Anfibio: Frogg" as frogg {
+    nome => "Frogg"
+}
+
+map "animal ----> 🦅 Passaro: Sky" as sky {
+    nome => "Sky"
+}
+
+nemo -[hidden]right- frogg
+frogg -[hidden]right- sky
+@enduml

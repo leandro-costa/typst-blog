@@ -1,0 +1,21 @@
+@startuml
+
+skinparam defaultFontSize 14
+
+node "DADOS\n(soltos, expostos, sem proteção)" as dados #FFA07A;line:OrangeRed;text:OrangeRed
+
+package "Funções" {
+    storage "função1()" as f1 #lightyellow
+    storage "função2()" as f2 #lightyellow
+    storage "função3()" as f3 #lightyellow
+}
+
+dados <--> f1
+dados <--> f2
+dados <--> f3
+
+note bottom of dados
+  Qualquer função
+  acessa qualquer dado
+end note
+@enduml

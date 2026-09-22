@@ -1,0 +1,17 @@
+@startuml
+
+class Figura{
+    + desenhar()
+}
+class Circulo{
+    + desenhar()
+}
+class Retangulo{
+    + desenhar()
+}
+class Quadrado extends Retangulo{
+    + desenhar()
+}
+Figura <|-- Circulo
+Figura <|-- Retangulo
+@enduml
