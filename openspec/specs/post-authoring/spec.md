@@ -65,3 +65,58 @@ Toda imagem, diagrama, tabela e bloco de código presente nos posts SHALL ser en
 #### Scenario: Tabela ou código envelopado em figura com caption
 - **WHEN** um post inclui uma tabela ou bloco de código
 - **THEN** o elemento é declarado via `#figure(table(...), caption: [...], kind: "table")` ou `#figure(```...```, caption: [...], kind: "code")`
+
+### Requirement: Execução ao vivo de código via Callisto (modo export)
+
+Um post MAY declarar blocos de código Java como executáveis de verdade, em vez de só
+ilustrativos, combinando o modo *export* do Callisto (`kernel:` + `#stage-notebook()`)
+com uma regra de show que intercepta uma linguagem dedicada (convenção: `java-x`) e
+chama `execute(it)`. O notebook gerado (`nb: path("<slug>.ipynb")`) SHALL viver ao
+lado do `.typ` e ser sincronizado automaticamente pelo build
+(`scripts/callisto-export.ts`) sempre que o `.typ` for mais recente que o `.ipynb`.
+
+#### Scenario: Bloco de código marcado como executável
+- **WHEN** um post define `#show raw.where(lang: "java-x"): it => execute(it)` e usa
+  `raw(read(...), lang: "java-x", block: true)` ou um bloco ` ```java-x ` inline
+  dentro de `#figure(...)`
+- **THEN** o build exporta esse trecho para o notebook, executa via `jupyter
+  nbconvert --execute` (kernel IJava) e a figura renderiza o código real seguido da
+  saída real capturada — não um texto digitado à mão simulando a saída
+
+#### Scenario: Trecho que não deve executar (ex.: quebraria o kernel)
+- **WHEN** um trecho de código é só ilustrativo, referencia símbolos indefinidos, ou
+  seu efeito colateral (crash, estado externo) não deve contaminar as células
+  seguintes
+- **THEN** o bloco usa uma linguagem comum (ex.: `java`), não `java-x`, permanecendo
+  estático e fora da regra de show
+
+#### Scenario: Erro intencional (ex.: demonstrar uma exceção real)
+- **WHEN** um bloco `java-x` é escrito para lançar uma exceção de propósito
+  pedagógico
+- **THEN** o `nbconvert` do build SHALL rodar com `--allow-errors`, para que o kernel
+  sobreviva ao erro e as células seguintes do mesmo notebook continuem executando
+  normalmente
+- **AND** o build SHALL continuar falhando (`ex.success == false`) apenas para falhas
+  de infraestrutura (kernel ausente, timeout), não para erros de célula
+
+#### Scenario: `typst eval` do modo export precisa do `--root` do projeto
+- **WHEN** `scripts/callisto-export.ts` roda `typst eval --input
+  callisto-export=true --in <doc>.typ "query(<notebook>).first().value"` para um
+  post que importa outro arquivo por caminho relativo (ex.:
+  `#import "../../templates/post.typ"`)
+- **THEN** o comando SHALL incluir `--root .`, senão falha com "path would escape
+  the project root" para qualquer post fora da raiz do projeto
+
+#### Scenario: Alinhamento de saída que não passa pelo `codly`
+- **WHEN** a saída de uma célula não é um elemento `raw` (ex.: o bloco de erro do
+  Callisto, que já vem estilizado via `text()`/`highlight()`, não via `raw()`)
+- **THEN** ela NÃO herda o alinhamento à esquerda que o `codly` aplica a blocos de
+  código — fica sujeita ao `align(center)` padrão do `#figure(...)`
+- **AND** a correção SHALL ser feita chamando `execute(...)` diretamente nesse ponto
+  específico (fora da regra de show global) e envolvendo o resultado em
+  `align(left, ...)`
+- **AND** qualquer nova regra `#show raw.where(lang: ...)` adicionada ao redor do
+  mecanismo de execução do Callisto (mesmo mirando uma linguagem diferente, como
+  `"ansi"`) MUST NOT ser usada como correção — na prática ela quebra a renderização
+  da célula inteira (execução some, vira placeholder vazio), porque colide com as
+  regras de show internas que o próprio Callisto usa para desenhar o traceback
