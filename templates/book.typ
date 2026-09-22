@@ -71,5 +71,6 @@
 
   // Conteúdo
   pagebreak()
+  show figure: set block(breakable: true)
   article-style(body)
 }

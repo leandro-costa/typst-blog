@@ -12,6 +12,6 @@
   set par(justify: true, leading: 0.65em)
   set heading(numbering: "1.")
   show figure.where(kind: table): set figure.caption(position: top)
-
+  show figure: set block(breakable: true)
   apply-codly(body)
 }

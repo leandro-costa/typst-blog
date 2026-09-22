@@ -1,4 +1,5 @@
 #import "../../templates/post.typ": post-layout
+#import "@preview/callisto:0.3.0"
 
 #let meta = (
   title: "Objetos: Referência, Comunicação, Comparação e toString",
@@ -9,13 +10,39 @@
 
 #let body = [
 
+#let (execute, stage-notebook) = callisto.config(
+  nb: path("aula-poo-03-objetos.ipynb"),
+  kernel: "ijava",
+)
+// Todo bloco marcado "java-x" — venha de um arquivo externo (`raw(read(...))`)
+// ou escrito direto na página — é exportado para o notebook e executado de
+// verdade; o que aparece embaixo do código é a saída real do kernel IJava.
+#show raw.where(lang: "java-x"): it => execute(it)
+#stage-notebook()
+
 == Onde a criatura realmente mora?
 
-Na aula passada você aprendeu a criar classes com atributos, métodos e construtores. Mas quando você escreve algo como
+Na aula passada você aprendeu a criar classes com atributos, métodos e construtores. A classe `Criatura` que construímos progressivamente vai nos acompanhar aqui — e, a partir de agora, todo código desta aula roda de verdade: o que você vê é o que executou, e a saída embaixo é a saída real do kernel.
 
-```java
-Criatura fenix = new Criatura("Fênix", 100, "Ave de Fogo", 30);
-```
+#figure(
+  raw(read("code/aula-poo-03-objetos/Criatura.java"), lang: "java-x", block: true),
+  caption: [Classe `Criatura`, base para os exemplos desta aula.]
+)
+
+Antes de mexer com referências, uma curiosidade rápida: o que acontece se você tentar *imprimir* um objeto direto, sem preparar nada?
+
+
+#figure(
+  ```java-x
+  Criatura fenix = new Criatura("Fênix", 100, "Ave de Fogo", 30);
+  IO.println(fenix);
+  ```,
+  caption: [Instanciação e impressão da criatura Fênix em Java.],
+)
+
+
+
+Nada legível. O nosso kernel roda o código dentro de um ambiente REPL (JShell), então o nome da classe vem com um prefixo interno (`REPL.$JShell$...`); rodando com `javac`/`java` puro ou no BlueJ, você veria só `Criatura@` seguido do endereço. De qualquer forma, o endereço muda a cada execução — o que importa aqui é que *nenhuma* das duas formas é informativa. Vamos resolver isso com `toString()` mais adiante.
 
 o que *exatamente* fica guardado na variável `fenix`? A criatura inteira? Surpresa: não.
 
@@ -27,17 +54,15 @@ Isso muda tudo:
 - *Comparar* com `==` compara os *endereços*, não o conteúdo dos objetos.
 - *Passar* um objeto como parâmetro de método envia a *referência* — o método pode alterar o objeto original de verdade.
 
-Usaremos daqui em diante a classe `Criatura` construída progressivamente na aula anterior:
-
-#figure(
-  raw(read("code/aula-poo-03-objetos/Criatura.java"), lang: "java", block: true),
-  caption: [Classe `Criatura`, base para os exemplos desta aula.]
-)
-
 == Duas referências, dois objetos
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Universo.java"), lang: "java", block: true),
+  ```java-x
+  Criatura c1 = new Criatura("Fênix", 100, "Ave de Fogo", 30);
+  Criatura c2 = new Criatura("Smaug", 200, "Dragão", 50);
+  IO.print(c1);
+  IO.print(c2);
+  ```,
   caption: [`c1` e `c2` apontam para criaturas diferentes.]
 )
 
@@ -51,25 +76,34 @@ Aqui `c1` e `c2` apontam para criaturas *diferentes* — cada uma com seu própr
 == Duas referências, um único objeto
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Universo_2.java"), lang: "java", block: true),
+  ```java-x
+  Criatura c1 = new Criatura("Fênix", 100, "Ave de Fogo", 30);
+  Criatura c2 = c1; // c2 aponta para a MESMA criatura!
+
+  c2.nome = "Fênix Renascida";
+  IO.println(c1.nome);
+  ```,
   caption: [`c2 = c1`: duas referências, o mesmo objeto.]
 )
 
-Cuidado: `c2 = c1` *não* cria uma nova criatura. Só faz `c2` apontar para o *mesmo* objeto que `c1`. Alterar por `c2` é o mesmo que alterar por `c1` — porque é literalmente a mesma criatura, só com dois apelidos.
+Cuidado: `c2 = c1` *não* cria uma nova criatura. Só faz `c2` apontar para o *mesmo* objeto que `c1`. Alterar por `c2` é o mesmo que alterar por `c1` — porque é literalmente a mesma criatura, só com dois apelidos. Por isso `c1.nome` também virou `"Fênix Renascida"`, mesmo sem nunca mexer em `c1` diretamente.
 
 #figure(
   image("img/aula-poo-03-objetos/diag02_02.svg"),
   caption: [Duas referências apontando para o mesmo objeto.],
 )
 
-Uma variável também pode não apontar para nada:
+Uma variável também pode não apontar para nada. Vamos deixar isso quebrar de propósito, para ver a exceção de verdade:
 
-```java
-Criatura fantasma = null; // Nenhuma criatura existe aqui
-fantasma.exibirStatus();  // ERRO! NullPointerException!
-```
+#figure(
+  ```java-x
+  Criatura fantasma = null; // Nenhuma criatura existe aqui
+  fantasma.exibirStatus();  // ERRO! NullPointerException!
+  ```,
+  caption: [Chamando um método numa referência nula.]
+)
 
-`null` significa que a referência não aponta para ninguém. Tentar invocar um método numa referência nula é gritar ordem para o vazio — o programa responde com uma bela `NullPointerException`.
+`null` significa que a referência não aponta para ninguém. Tentar invocar um método numa referência nula é gritar ordem para o vazio — o programa responde com uma `NullPointerException` de verdade, como você vê no erro acima. O kernel sobrevive: as próximas células continuam rodando normalmente depois de um erro.
 
 == Comunicação entre objetos
 
@@ -78,7 +112,7 @@ Objetos não vivem isolados: eles interagem através de *mensagens*, que em Java
 Vamos aprofundar isso com a classe `Conta`:
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Conta.java"), lang: "java", block: true),
+  raw(read("code/aula-poo-03-objetos/Conta.java"), lang: "java-x", block: true),
   caption: [Classe `Conta` com o método `transferir`.]
 )
 
@@ -90,7 +124,20 @@ Repare no método `transferir`: ele recebe *outra conta* como parâmetro. Quando
 )
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Universo_3.java"), lang: "java", block: true),
+  ```java-x
+  Conta c1 = new Conta(1, "Leandro");
+  Conta c2 = new Conta(2, "Maria");
+
+  c1.depositar(1000);
+
+  c1.exibirExtrato();
+  c2.exibirExtrato();
+
+  c1.transferir(c2, 200);
+
+  c1.exibirExtrato();
+  c2.exibirExtrato();
+  ```,
   caption: [Transferência entre duas contas em ação.]
 )
 
@@ -115,11 +162,20 @@ Por padrão, o `equals()` herdado de `Object` compara endereços — igualzinho 
 === O operador `==` compara referências
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Universo_4.java"), lang: "java", block: true),
+  ```java-x
+  Criatura c1 = new Criatura("Fênix", 100, "Ave de Fogo", 30);
+  Criatura c2 = new Criatura("Fênix", 100, "Ave de Fogo", 30);
+
+  if (c1 == c2) {
+      IO.println("Mesma criatura!");
+  } else {
+      IO.println("Criaturas diferentes!");
+  }
+  ```,
   caption: [Duas criaturas com atributos idênticos, comparadas com `==`.]
 )
 
-Mesmo com atributos idênticos, `c1 == c2` dá `false`. Por quê? Porque `==` compara *endereços* de memória, e cada `new` cria um objeto num endereço diferente. São gêmeas — não a mesma criatura.
+Por quê? Porque `==` compara *endereços* de memória, e cada `new` cria um objeto num endereço diferente. São gêmeas — não a mesma criatura.
 
 #figure(
   image("img/aula-poo-03-objetos/diag04_04.svg"),
@@ -130,71 +186,76 @@ O `==` pergunta "vocês moram no mesmo lugar?" — não "vocês são iguais?". P
 
 === O método `equals()` compara conteúdo
 
-Para comparar duas criaturas pelo conteúdo, sobrescrevemos o `equals()`:
+Para comparar duas criaturas pelo conteúdo, sobrescrevemos o `equals()`. Isso redefine a `Criatura` que já estava rodando desde o início da aula — a partir daqui ela ganha um critério de igualdade de verdade:
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Criatura_2.java"), lang: "java", block: true),
+  raw(read("code/aula-poo-03-objetos/Criatura_2.java"), lang: "java-x", block: true),
   caption: [`equals()` sobrescrito para comparar criaturas pelo nome.]
 )
 
 Agora dá pra comparar pelo conteúdo:
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Universo_5.java"), lang: "java", block: true),
+  ```java-x
+  Criatura c1 = new Criatura("Fênix", 100, "Ave de Fogo", 30);
+  Criatura c2 = new Criatura("Fênix", 150, "Ave de Gelo", 40);
+
+  IO.println(c1 == c2);      // false — endereços diferentes
+  IO.println(c1.equals(c2)); // true  — mesmo nome!
+  ```,
   caption: [Comparando criaturas com `equals()`.]
 )
 
 Quem define o *critério de igualdade* é você. No exemplo acima, decidimos que duas criaturas são iguais se tiverem o mesmo nome. Poderia ser pelo tipo, pela vida, ou por uma combinação de atributos — depende da regra do seu programa.
 
-Outro exemplo, com a classe `Conta`:
+Outro exemplo, com a classe `Conta` (redefinindo, do mesmo jeito, a `Conta` que já vínhamos usando):
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Conta_2.java"), lang: "java", block: true),
+  raw(read("code/aula-poo-03-objetos/Conta_2.java"), lang: "java-x", block: true),
   caption: [`equals()` sobrescrito na classe `Conta`.]
 )
 
 == toString: dando voz ao objeto
 
-Sem `toString()`, imprimir um objeto com `IO.println(fenix)` mostra algo como `Criatura@1a2b3c4d` — o nome da classe seguido do endereço de memória. Nada informativo.
-
-```java
-Criatura fenix = new Criatura("Fênix", 100, "Ave de Fogo", 30);
-IO.println(fenix); // Imprime algo como: Criatura@1a2b3c4d
-```
-
-Isso acontece porque o `toString()` padrão, herdado de `Object`, só devolve nome da classe + endereço. Sobrescreva-o para dar uma identidade legível ao objeto:
+Lá no início da aula vimos que, sem `toString()`, imprimir um objeto mostra algo ilegível — o nome da classe seguido do endereço de memória. Vamos consertar isso sobrescrevendo o método:
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Criatura_3.java"), lang: "java", block: true),
-  caption: [`toString()` sobrescrito para uma apresentação legível.]
+  text(size: 0.8em, raw(read("code/aula-poo-03-objetos/Criatura_4.java"), lang: "java-x", block: true)),
+  caption: [Versão completa de `Criatura`, agora com `toString()` também sobrescrito (além do `equals()` que já tinha).]
 )
-
-Agora:
-
-```java
-Criatura fenix = new Criatura("Fênix", 100, "Ave de Fogo", 30);
-IO.println(fenix); // Fênix [Ave de Fogo] - Vida: 100 | Força: 30
-```
-
-O `IO.println()` chama o `toString()` automaticamente. O objeto agora sabe se apresentar. O `@Override` indica que estamos sobrescrevendo um método herdado da classe `Object` — falaremos mais de herança em breve, mas já vale saber: todo objeto em Java herda o `toString()`, e você pode personalizá-lo.
-
-Outro exemplo com `Conta`:
 
 #figure(
-  raw(read("code/aula-poo-03-objetos/Conta_3.java"), lang: "java", block: true),
-  caption: [`toString()` sobrescrito na classe `Conta`.]
+  ```java-x
+  Criatura fenix = new Criatura("Fênix", 100, "Ave de Fogo", 30);
+  IO.println(fenix);
+  ```,
+  caption: [Criando uma criatura e imprimindo-a.]
 )
 
-```java
-Conta c1 = new Conta(1, "Leandro");
-c1.depositar(500);
-IO.println(c1); // Conta 1 | Leandro | Saldo: R$500.0 | Limite: R$0.0
-```
+O objeto agora sabe se apresentar. O `@Override` indica que estamos sobrescrevendo um método herdado da classe `Object` — falaremos mais de herança em breve, mas já vale saber: todo objeto em Java herda o `toString()`, e você pode personalizá-lo.
+
+Outro exemplo com `Conta`, agora também com `toString()`:
+
+#figure(
+  raw(read("code/aula-poo-03-objetos/Conta_4.java"), lang: "java-x", block: true),
+  caption: [`Conta` completa, agora com `toString()` sobrescrito.]
+)
+
+#figure(
+  ```java-x
+  Conta c1 = new Conta(1, "Leandro");
+  c1.depositar(500);
+  IO.println(c1);
+  ```,
+  caption: [Depositando e imprimindo uma conta.]
+)
 
 == A classe `Criatura` completa (até aqui)
 
+Segue de novo, como referência rápida, a versão completa da `Criatura` que já usamos e executamos na seção de `toString()`:
+
 #figure(
-  raw(read("code/aula-poo-03-objetos/Criatura_4.java"), lang: "java", block: true),
+  text(size: 0.8em, raw(read("code/aula-poo-03-objetos/Criatura_4.java"), lang: "java-x", block: true)),
   caption: [Versão completa de `Criatura` com tudo que vimos até esta aula.]
 )
 
@@ -216,7 +277,7 @@ Duas criaturas no banco. Parecem iguais — mas serão?
 
 *Passo 6 — Inspecionar:* inspecione `fenix1` e `fenix2`. Mesma essência, mas objetos *diferentes* no banco, cada um no seu próprio lugar. Gêmeas, não a mesma criatura.
 
-*Passo 7 — Referência compartilhada:* no Code Pad do BlueJ (View → Show Code Pad):
+*Passo 7 — Referência compartilhada:* no Code Pad do BlueJ (View → Show Code Pad) — este trecho é específico do BlueJ, então não roda no nosso notebook:
 
 ```java
 Criatura c1 = fenix1;

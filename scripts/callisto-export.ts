@@ -62,6 +62,8 @@ export async function syncExportNotebooks(): Promise<void> {
         "typst",
         [
           "eval",
+          "--root",
+          ".",
           "--input",
           "callisto-export=true",
           "--in",
@@ -88,6 +90,10 @@ export async function syncExportNotebooks(): Promise<void> {
           nb.split("/").pop() ?? nb,
           "--inplace",
           "--ExecutePreprocessor.timeout=300",
+          // Permite continuar após uma célula com erro (ex.: uma exceção
+          // Java intencional, mostrada como parte do conteúdo didático) em
+          // vez de abortar a execução das células seguintes do notebook.
+          "--allow-errors",
         ],
         { cwd: doc.dir }
       );

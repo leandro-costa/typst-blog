@@ -14,7 +14,7 @@
   nb: path("plantuml-demo.ipynb"),
 )
 
-Diagramas PlantUML escritos como texto dentro de células do Jupyter (kernel IJava) viram imagens geradas **localmente**, sem servidor externo e sem Graphviz (para diagramas de sequência). O segredo está no formato de saída: a mágica emite `image/png`, que o Callisto converte em imagem nativa do Typst — o mesmo caminho dos plots matplotlib.
+Diagramas PlantUML escritos como texto dentro de células do Jupyter (kernel IJava) viram imagens geradas *localmente*, sem servidor externo e sem Graphviz (para diagramas de sequência). O segredo está no formato de saída: a mágica emite `image/png`, que o Callisto converte em imagem nativa do Typst — o mesmo caminho dos plots matplotlib.
 
 == Dependência via `%maven`
 
