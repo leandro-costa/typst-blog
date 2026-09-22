@@ -96,10 +96,7 @@ Cuidado: `c2 = c1` *não* cria uma nova criatura. Só faz `c2` apontar para o *m
 Uma variável também pode não apontar para nada. Vamos deixar isso quebrar de propósito, para ver a exceção de verdade:
 
 #figure(
-  ```java-x
-  Criatura fantasma = null; // Nenhuma criatura existe aqui
-  fantasma.exibirStatus();  // ERRO! NullPointerException!
-  ```,
+  align(left, execute(raw("Criatura fantasma = null; // Nenhuma criatura existe aqui\nfantasma.exibirStatus();  // ERRO! NullPointerException!", lang: "java", block: true))),
   caption: [Chamando um método numa referência nula.]
 )
 
