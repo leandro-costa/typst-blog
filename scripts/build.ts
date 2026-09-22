@@ -19,16 +19,20 @@ import { generateBook } from "./generate-book.ts";
 import { writeSearchIndex, writeRss } from "./static-outputs.ts";
 import { generateSvgs } from "./generate-svg.ts";
 import { processSvgs } from "./process-svg.ts";
+import { checkDeps } from "./check-deps.ts";
 
 const POSTS_DIR = "posts";
 const DIST_DIR = "dist";
 const SITE_FILE = "site.typ";
 const BOOK_FILE = "book.typ";
-const CONFIG_FILE = "typst.toml";
+const CONFIG_FILE = "typst.dev.toml";
 
 async function build(): Promise<void> {
   console.log("🚀 Typst Blog — Builder");
   console.log("===========================\n");
+
+  // 0. Verifica o toolchain (typst, bun, java, graphviz, callisto, ipynb)
+  await checkDeps();
 
   // 0. Carrega configuração do typst.toml
   console.log(`⚙️  Lendo configuração de ${CONFIG_FILE}...`);

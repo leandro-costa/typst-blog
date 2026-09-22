@@ -19,7 +19,7 @@
 ## Contexto do projeto
 
 - Repo: `typst-blog` — blog estático + livro PDF, tudo em Typst, build em TypeScript/Bun.
-- Runtime: **Bun**. Typst 0.15.1.
+- Runtime: **Bun**. Typst 0.15.1 ou mais recente;
 - Changes OpenSpec em `openspec/changes/`; especificações em `openspec/specs/`.
 
 ## Achados técnicos importantes (validados)

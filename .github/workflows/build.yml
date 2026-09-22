@@ -18,9 +18,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - uses: typst-community/setup-typst@v4
+      - uses: typst-community/setup-typst@v5
         with:
-          version: 0.15.0
+          typst-version: 0.15.1
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Instalar Graphviz
+        run: sudo apt-get update && sudo apt-get install -y graphviz
       - run: bun install
       - run: bun run build
       - uses: actions/upload-pages-artifact@v3

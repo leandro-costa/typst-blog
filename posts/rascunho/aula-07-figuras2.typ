@@ -1,11 +1,12 @@
 ﻿#import "@preview/callisto:0.3.0"
 #import "../../templates/typography.typ": article-style
+#import "@preview/callisto:0.3.0"
 
 #show: article-style
 
 = Aula 07
 
-Nesta aula você vai aprender a inserir os quatro tipos de conteúdo visual mais comuns em um documento Typst: **código**, **tabela**, **imagem** e **diagrama**. A regra é única: todo conteúdo visual precisa estar dentro de um `#figure(...)` com uma `caption` e um `kind`.
+Nesta aula você vai aprender a inserir os quatro tipos de conteúdo visual mais comuns em um documento Typst: *código*, *tabela*, *imagem* e *diagrama*. A regra é única: todo conteúdo visual precisa estar dentro de um `#figure(...)` com uma `caption` e um `kind`.
 
 == Bloco de código
 

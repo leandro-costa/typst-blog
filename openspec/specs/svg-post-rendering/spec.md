@@ -79,7 +79,8 @@ seção dentro do `<object>`, usando a numeração derivada da ordem do `parseTo
 
 O corpo do post SHALL não aplicar o tema Prism nem o JS de realce de código do corpo
 HTML, pois as cores do código (codly) são embutidas no SVG. A busca via `search-index.json`
-SHALL permanecer funcional.
+SHALL permanecer funcional. Esta capability **substitui** `prism-integration` (capability
+removida — ver change arquivado `2026-08-17-add-prism-syntax-highlighting` como histórico).
 
 #### Scenario: Prism não é aplicado ao corpo
 - **WHEN** o site é compilado

@@ -37,8 +37,15 @@ Se o corpo da célula não começar com `@startuml`, envolvê-lo com as tags. As
 ### 4. Dependência via `%maven`
 Usar `%maven net.sourceforge.plantuml:plantuml:<versão>` na célula de configuração para baixar a biblioteca em tempo de execução. A versão precisa ser pinada (ex.: 1.2024.3) para reprodutibilidade.
 
-### 5. API do IJava ainda não validada empiricamente
-A assinatura exata para exibir `image/png` no IJava precisa ser confirmada rodando no kernel. Candidatos: `getDisplay().render(pngBytes, "image/png")` ou exibir um `BufferedImage`/`Image` nativo. Este é um ponto de verificação antes de finalizar a implementação.
+### 5. API do IJava validada empiricamente (2026-09-22, kernel `com.github.waikato.thirdparty:ijava:1.3.0`)
+Confirmado via `javap` no jar + execução real em `posts/aulas/plantuml-demo.ipynb`:
+- Registro: `Kernel.getKernelInstance().getMagics().registerCellMagic("plantuml", (args, body) -> {...})`
+  (`io.github.spencerpark.ijava.runtime.Kernel`, `CellMagicFunction.execute(List<String>, String)`).
+- Display: retornar o `BufferedImage` **não basta** — células `%%` são expandidas para statement e o
+  valor de retorno é descartado. É preciso publicar explicitamente com
+  `Display.display(img)` (`io.github.spencerpark.ijava.runtime.Display`), que emite o
+  `display_data image/png` (o kernel serializa `RenderedImage` como PNG base64).
+- Erros viram retorno de texto legível (`"Erro PlantUML: ..."`).
 
 ### 6. Verificação de dependências no build
 O `scripts/build.ts` deve checar as dependências antes de compilar, usando `runCommand` (lib.ts) para executar o binário com flag de versão (`typst --version`, `java -version`, `graphviz -V`). `bun` é o próprio runtime do script (verificado via `process.versions.bun` contra `package.json` `engines.bun`). Cada dependência ausente gera uma mensagem de erro clara identificando o que falta e o build aborta com `exit(1)`.

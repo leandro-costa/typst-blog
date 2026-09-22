@@ -166,8 +166,7 @@ export async function runCommand(
   });
 }
 
-export interface PostMeta {
-  title: string;
+export interface PostMeta {  title: string;
   date: string;
   slug: string;
   author?: string;

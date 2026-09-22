@@ -21,13 +21,27 @@ typst-blog-v2/
 
 ## Requisitos
 
-- **Typst v0.15+** (para o export `bundle` experimental)
-- **Bun** (para o build)
+- **Typst v0.15.1+** (para o export `bundle` experimental)
+- **Bun 1.0+** (para o build)
 
 ```
-typst --version   # precisa ser 0.15+
-bun --version
+typst --version   # precisa ser 0.15.1+
+bun --version     # precisa ser 1.0+
 ```
+
+## Ferramentas (verificadas pelo build)
+
+O `bun run build` começa verificando todo o toolchain em `scripts/check-deps.ts`
+(etapa 0). Qualquer item ausente aborta o build com a instrução de instalação:
+
+| Ferramenta | Mínimo | Quando é exigida |
+|------------|--------|------------------|
+| `typst` | 0.15.1 | sempre |
+| `bun` | 1.0 | sempre |
+| `java` (JDK) | 17 | se algum `.ipynb` usa `%%plantuml` (kernel IJava) |
+| `graphviz` (`dot`) | — | se algum diagrama exige (classe, atividade, estado…; sequência funciona sem) |
+| `callisto` (pacote Typst) | versão única pinada (hoje 0.3.0) | se há `#import "@preview/callisto:…"` |
+| notebooks `.ipynb` | nbformat 4, JSON válido | todo `nb: path("…")` do Callisto deve existir; células `%%plantuml` devem trazer o output `image/png` salvo (diagrama gerado localmente, offline) |
 
 ## Como escrever um post
 
@@ -121,5 +135,5 @@ servidor estático. Os links usam caminhos absolutos (`/index.html`, `/assets/..
 
 ## Nota sobre estabilidade
 
-O export `bundle` do Typst ainda é **experimental** (v0.15+). Para um blog pessoal é
+O export `bundle` do Typst ainda é **experimental** (v0.15.1+). Para um blog pessoal é
 uma boa pedida; apenas confira o changelog do Typst ao atualizar a versão.

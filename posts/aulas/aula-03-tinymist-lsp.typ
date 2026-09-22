@@ -1,7 +1,7 @@
 #import "../../templates/post.typ": post-layout
 
 #let meta = (
-  title: "Tinymist: O LSP para Typst",
+  title: "Aula 03 - Tinymist: O LSP para Typst",
   date: "2026-08-10",
   
   tags: ("typst", "tinymist", "lsp", "editor"),
@@ -43,12 +43,20 @@ Uma das funcionalidades mais impressionantes é o preview instantâneo. A cada a
 
 O Tinymist funciona com diversos editores:
 
-| Editor | Extensão/Plugin |
-|--------|-----------------|
-| VS Code | Tinymist Typst |
-| Neovim | `nvim-lspconfig` + `typst-preview.nvim` |
-| Helix | Suporte LSP nativo |
-| Kate | Via LSP |
+#figure(
+
+table(
+columns: 2,
+[*Editor*], [*Extensão/Plugin*],
+[VS Code] , [Tinymist Typst ],
+[Neovim] , [`nvim-lspconfig` + `typst-preview.nvim` ],
+[Helix] , [Suporte LSP nativo ],
+[Kate] , [Via LSP ],
+  
+)
+)
+
+
 
 == Configuração no Neovim
 

@@ -67,3 +67,27 @@ O script de build MUST verificar a presença das dependências da feature PlantU
 #### Scenario: Dependências presentes
 - **WHEN** o build executa e `java` e `graphviz` estão disponíveis
 - **THEN** o build prossegue normalmente
+
+### Requirement: Verificação do toolchain pelo build
+
+O build SHALL verificar todo o toolchain na etapa 0 (`scripts/check-deps.ts`), antes
+de qualquer compilação: `typst` (≥ 0.15.1), `bun` (≥ 1.0), versão pinada única do
+pacote `callisto` em todos os `.typ`, existência e validade (nbformat 4) de todo
+notebook `.ipynb` referenciado por `nb: path("...")` do Callisto. Células `%%plantuml`
+SHALL trazer o output `image/png` salvo no notebook (diagrama gerado localmente).
+`java` SHALL ser exigido quando há `%%plantuml`; `graphviz` SHALL ser exigido quando
+há diagrama que o exige. Qualquer falha SHALL abortar com mensagem identificando o
+que instalar e `exit(1)`.
+
+#### Scenario: Toolchain completo
+- **WHEN** `bun run build` executa com todas as ferramentas presentes e válidas
+- **THEN** a etapa 0 passa e o build prossegue
+
+#### Scenario: Ferramenta ausente
+- **WHEN** `typst`, `bun`, `java` (exigido), `graphviz` (exigido), notebook ou versão
+  do callisto está ausente/inválido
+- **THEN** o build aborta na etapa 0 com mensagem identificando a dependência e como instalar
+
+#### Scenario: Notebook com plantuml não executado
+- **WHEN** uma célula `%%plantuml` não tem output `image/png` salvo no `.ipynb`
+- **THEN** o build aborta orientando a executar e salvar o notebook no Jupyter
